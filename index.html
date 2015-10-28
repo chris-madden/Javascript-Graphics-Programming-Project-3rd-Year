@@ -37,6 +37,8 @@
         drawUserShip();
     }
     
+    //var collisonLeft = 
+    
      //Object for the user Ship
     var userShipObject = {
         
@@ -60,23 +62,48 @@
         },  
         acceleration: {
             
-            x: 8,
+            x: 7,
             y: 0
             
         },
         moveRight: function () {
             
-            //Move the ship to the right along the x axis to the speed set in the acceleration object
-            userShipObject.shipTopPosition.x += userShipObject.acceleration.x;
-            userShipObject.shipLeftPostiton.x += userShipObject.acceleration.x;
-            userShipObject.shipRightPosition.x += userShipObject.acceleration.x;
+            //If ships right corner isn't touching the edge of the canvas and is less than or equal to the canvas width - the acceleration value
+            if(userShipObject.shipRightPosition.x < canvas.width && userShipObject.shipRightPosition.x <= (canvas.width - userShipObject.acceleration.x))
+            {     
+                //Move the ship to the right along the x axis to the speed set in the acceleration object
+                userShipObject.shipTopPosition.x += userShipObject.acceleration.x;
+                userShipObject.shipLeftPostiton.x += userShipObject.acceleration.x;
+                userShipObject.shipRightPosition.x += userShipObject.acceleration.x;
+            }
+            //If ships postion is greater than the (canvas width - acceleration distance) E.G 595 > 590. Only move the number of pixels required to reach 600 (canvas.width)
+            else if(userShipObject.shipRightPosition.x > (canvas.width - userShipObject.acceleration.x))
+            {
+                //Move ship the pixels required to reach edge of canvas
+                userShipObject.shipTopPosition.x += (canvas.width - userShipObject.shipRightPosition.x);
+                userShipObject.shipLeftPostiton.x += (canvas.width - userShipObject.shipRightPosition.x);
+                userShipObject.shipRightPosition.x += (canvas.width - userShipObject.shipRightPosition.x);
+            }
+            
         },
         moveLeft: function(){
+        
+            //If shipLeftPostiton.x is greater than 0 and greater than or equal to acceleration.x
+            if(userShipObject.shipLeftPostiton.x > 0 && userShipObject.shipLeftPostiton.x >= userShipObject.acceleration.x)
+            {
+                //Move the ship to the left along the x axis to the speed set in the acceleration object
+                userShipObject.shipTopPosition.x -= userShipObject.acceleration.x;
+                userShipObject.shipLeftPostiton.x -= userShipObject.acceleration.x;
+                userShipObject.shipRightPosition.x -= userShipObject.acceleration.x;
+            }
+            else if(userShipObject.shipLeftPostiton.x < userShipObject.acceleration.x)//shipLeftPostiton.x less than acceleration.x
+            {
+                //Move the ship to the left along the x axis to the amount of remaining pixels
+                userShipObject.shipRightPosition.x -= userShipObject.shipLeftPostiton.x;
+                userShipObject.shipTopPosition.x -= userShipObject.shipLeftPostiton.x;
+                userShipObject.shipLeftPostiton.x -= userShipObject.shipLeftPostiton.x;  
+            }
             
-            //Move the ship to the left along the x axis to the speed set in the acceleration object
-            userShipObject.shipTopPosition.x -= userShipObject.acceleration.x;
-            userShipObject.shipLeftPostiton.x -= userShipObject.acceleration.x;
-            userShipObject.shipRightPosition.x -= userShipObject.acceleration.x;
         }
         
     }//End of userShipObject
@@ -109,10 +136,8 @@
     //Repeated function which takes care of the animation frames
     function step()
     {
-
         drawUserShip();
         requestAnimationFrame(step);
-
     }
 
     //Adding an event listener so user can use keys to move ship
@@ -123,17 +148,24 @@
         {     
             //Move the ship to the right
             userShipObject.moveRight();       
+            console.log("Ship left corner at " + userShipObject.shipLeftPostiton.x);
+            console.log("Ship right corner at " +userShipObject.shipRightPosition.x);
+            console.log("Ship top at " + userShipObject.shipTopPosition.x);
+            
         }
         else if(event.keyCode == 37)//If left arrow key is pressed
         {
             userShipObject.moveLeft();
+            console.log("Ship left corner at " + userShipObject.shipLeftPostiton.x);
+            console.log("Ship right corner at " +userShipObject.shipRightPosition.x);
+            console.log("Ship top at " + userShipObject.shipTopPosition.x);
         }
      
     });//End event listener
       
     //Call the step method 
     step();
-        
+
     </script>
 
 </body>
