@@ -46,36 +46,39 @@
             y: 700
             
         },
-        
         shipLeftPostiton: {
             
             x: 275,
             y: 725
             
         },
-        
         shipRightPosition: {
             
             x: 325,
             y: 725
         
-        },
-        
+        },  
         acceleration: {
             
-            x: 1,
+            x: 8,
             y: 0
             
         },
+        moveRight: function () {
+            
+            //Move the ship to the right along the x axis to the speed set in the acceleration object
+            userShipObject.shipTopPosition.x += userShipObject.acceleration.x;
+            userShipObject.shipLeftPostiton.x += userShipObject.acceleration.x;
+            userShipObject.shipRightPosition.x += userShipObject.acceleration.x;
+        },
+        moveLeft: function(){
+            
+            //Move the ship to the left along the x axis to the speed set in the acceleration object
+            userShipObject.shipTopPosition.x -= userShipObject.acceleration.x;
+            userShipObject.shipLeftPostiton.x -= userShipObject.acceleration.x;
+            userShipObject.shipRightPosition.x -= userShipObject.acceleration.x;
+        }
         
-         move: function () {
-
-                userShipObject.shipTopPosition.x += 0.1;
-                userShipObject.shipLeftPostiton.x += 0.1;
-                userShipObject.shipRightPosition.x += 0.1;
-            }
-        
-
     }//End of userShipObject
 
     //Draws the users ship to the canvas
@@ -99,146 +102,37 @@
         //Colour in the ship
         ctx.fill();
     }
-    
-   
-    
-        /*
-        //Constructor in javascript
-        function Rect(x, y, w, h)
+
+    //Initialise size of canvas
+    onLoad();
+
+    //Repeated function which takes care of the animation frames
+    function step()
+    {
+
+        drawUserShip();
+        requestAnimationFrame(step);
+
+    }
+
+    //Adding an event listener so user can use keys to move ship
+    window.addEventListener("keydown", function(event) { 
+
+        //If right arrow key is pressed
+        if (event.keyCode == 39)
+        {     
+            //Move the ship to the right
+            userShipObject.moveRight();       
+        }
+        else if(event.keyCode == 37)//If left arrow key is pressed
         {
-            this.x = x;
-            this.y = y;
-            this.w = w;
-            this.h = h;
-            this.draw = function()
-            {
-            
-               ctx.fillStyle = 'rgb(0, 0, 255)';
-               ctx.fillRect(this.x, this.y, this.w, this.h);
-            
-            }
-            
-            this.hitBall = function()
-            {
-            
-                if(ball.position.x >= this.x && ball.position.x <= this.x + this.w)
-                {
-                
-                     if(ball.position.y >= this.y && ball.position.y <= this.y + this.h)
-                    {
-                
-                        this.active = false;
-                
-                    }//End inner if
-                
-                }//End outer if
-            
-            }
+            userShipObject.moveLeft();
         }
-        
-        //Same as creating a new instance of a class
-        var rect = new Rect();
-
-        //Resizes canvas
-        function init() {
-            canvas.width = 400;
-            canvas.height = 400;
-            ball.draw();
-            requestAnimationFrame(step);
-        }
-
-        var draw = function () {
-
-            // Draw the ball (stroked, not filled).
-            ctx.fillStyle = 'rgb(255, 0, 0)';
-            ctx.beginPath();
-            ctx.arc(this.position.x, this.position.y, this.r, 0, 2 * Math.PI);
-            ctx.fill();
-
-        }
-
-        //Ball object
-        var ball = {
-
-            r: 10,
-            position: {
-                x: 10,
-                y: 10
-            },
-            velocity: {
-                x: 0,
-                y: 5
-            },
-            acceleration: {
-                x: 0,
-                y: 1
-            },
-            draw: draw,
-            move: function () {
-
-                this.position.x += this.velocity.x;
-                this.position.y += this.velocity.y;
-                this.position.x += this.acceleration.x;
-                this.position.y += this.acceleration.y;
-
-            }
-            
-        }//End ball object
-        
-        var rects = [];
-        
-        for(var i = 0; i < 10; i++)
-        {
-            //rects[i].hitBall();
-            //Randomly create different rectangles
-            rects.push(new Rect(Math.random() * 400, Math.random() * 400, 30, 6));
-        
-        }
-        
-        //Add parameter and log it and you'll see how long it's been since your last frame
-        function step()
-        {
-        
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for(var i = 0; i < rects.length; i++)
-            {
-            
-                rects[i].draw();
-            
-            }
-            
-            ball.move();
-            ball.draw();
-            requestAnimationFrame(step);
-        
-        }
-        
-        step();
-        */
-        
-         //Initialise size of canvas
-        onLoad();
-    
-        function step()
-        {
-        
-            //ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            /*for(var i = 0; i < rects.length; i++)
-            {
-            
-                rects[i].draw();
-            
-            }*/
-            
-            drawUserShip();
-            userShipObject.move();
-            requestAnimationFrame(step);
-        
-        }
-        
-        step();
+     
+    });//End event listener
+      
+    //Call the step method 
+    step();
         
     </script>
 
