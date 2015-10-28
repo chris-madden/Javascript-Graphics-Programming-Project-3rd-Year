@@ -59,7 +59,22 @@
             x: 325,
             y: 725
         
-        }
+        },
+        
+        acceleration: {
+            
+            x: 1,
+            y: 0
+            
+        },
+        
+         move: function () {
+
+                userShipObject.shipTopPosition.x += 0.1;
+                userShipObject.shipLeftPostiton.x += 0.1;
+                userShipObject.shipRightPosition.x += 0.1;
+            }
+        
 
     }//End of userShipObject
 
@@ -204,6 +219,26 @@
         
          //Initialise size of canvas
         onLoad();
+    
+        function step()
+        {
+        
+            //ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            /*for(var i = 0; i < rects.length; i++)
+            {
+            
+                rects[i].draw();
+            
+            }*/
+            
+            drawUserShip();
+            userShipObject.move();
+            requestAnimationFrame(step);
+        
+        }
+        
+        step();
         
     </script>
 
