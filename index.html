@@ -36,25 +36,56 @@
         canvas.height = 800;
         drawUserShip();
     }
+    
+     //Object for the user Ship
+    var userShipObject = {
+        
+        shipTopPosition: {
+            
+            x: 300,
+            y: 700
+            
+        },
+        
+        shipLeftPostiton: {
+            
+            x: 275,
+            y: 725
+            
+        },
+        
+        shipRightPosition: {
+            
+            x: 325,
+            y: 725
+        
+        }
+
+    }//End of userShipObject
 
     //Draws the users ship to the canvas
     function drawUserShip()
     {
+        //Clear the canvas each time method is called
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        //Start path for drawing ship
         ctx.beginPath(); 
-        ctx.moveTo(300, 700); 
-        ctx.lineTo(275, 725); 
-        ctx.lineTo(325, 725); 
+        
+        //Position the top of ship will be at
+        ctx.moveTo(userShipObject.shipTopPosition.x, userShipObject.shipTopPosition.y); 
+        
+        //Draw line to left corner of ship
+        ctx.lineTo(userShipObject.shipLeftPostiton.x, userShipObject.shipLeftPostiton.y); 
+        
+        //Draw line to right corner of ship
+        ctx.lineTo(userShipObject.shipRightPosition.x, userShipObject.shipRightPosition.y); 
+        
+        //Colour in the ship
         ctx.fill();
     }
     
-    var userShipObject = {
-        
-        
-        
-        
-        
-        
-    }
+   
     
         /*
         //Constructor in javascript
