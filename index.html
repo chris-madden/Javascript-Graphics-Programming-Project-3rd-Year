@@ -20,16 +20,33 @@
 
 <body>
 
-    <canvas id="canvasOne"></canvas>
+  <canvas id="canvasOne"></canvas>
 
-    <script type="text/javascript">
-        
-        // Gets a handle to the element with id canvasOne.
-        var canvas = document.getElementById("canvasOne");
+<script type="text/javascript">
+    
+    // Gets a handle to the element with id canvasOne.
+    var canvas = document.getElementById("canvasOne");
 
-        // Set the canvas up for drawing in 2D.
-        var ctx = canvas.getContext("2d");
-        
+    // Set the canvas up for drawing in 2D.
+    var ctx = canvas.getContext("2d");
+
+    //Resizes canvas when file opened
+    function onLoad() {
+        canvas.width = 600;
+        canvas.height = 800;
+        drawUserShip();
+    }
+
+    //Draws the users ship to the canvas
+    function drawUserShip()
+    {
+        ctx.beginPath(); 
+        ctx.moveTo(75, 50); 
+        ctx.lineTo(100, 75); 
+        ctx.lineTo(100, 25); 
+        ctx.fill();
+    }
+    
         /*
         //Constructor in javascript
         function Rect(x, y, w, h)
@@ -122,9 +139,6 @@
             rects.push(new Rect(Math.random() * 400, Math.random() * 400, 30, 6));
         
         }
-
-        //Initialise size of canvas
-        init();
         
         //Add parameter and log it and you'll see how long it's been since your last frame
         function step()
@@ -147,6 +161,9 @@
         
         step();
         */
+        
+         //Initialise size of canvas
+        onLoad();
         
     </script>
 
