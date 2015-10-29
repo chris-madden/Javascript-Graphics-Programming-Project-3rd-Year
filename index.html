@@ -65,7 +65,7 @@
     
     //Draws the bullet
     function drawBullet(){
-        
+         
         //Start path for drawing ship
         ctx.beginPath(); 
         
@@ -78,22 +78,41 @@
     }
     
     //Function repeats using requestAnimationFrame which makes the bullet travel by itself after being shot
-    function moveBullet(){
+    function moveBullet(updatedX, updatedY, flag){
         
-        drawBullet();
-        
-        // Collision detection for bullet with top of canvas
-        if(bullet.position.y)
+        //Only update variable on first frame
+        if(flag == 1)
         {
-            
-            bullet.position.y -= bullet.velocity.y;
-            
+            //Update the bullet position with the ships location
+            bullet.position.x = updatedX;
+            bullet.position.y = updatedY; 
         }
         
+        drawBullet();
+          
+        // ***Bullet is speeding up on each press of the space bar *** 
+        bullet.position.y -= bullet.velocity.y;
+        
+        console.log("velocity = " + bullet.velocity.y);
+        console.log("Y bullet position = " +  bullet.position.y);
+            
+        //Repeat the function
+        requestAnimationFrame(moveBullet);
+        
+        flag == 0;
+
+    }
+    
+    /*function moveBullet(){
+         
+        drawBullet();
+        
+        bullet.position.y -= bullet.velocity.y;
+            
         //Repeat the function
         requestAnimationFrame(moveBullet);
 
-    }
+    }*/
      
     //Object for the user Ship
     var userShipObject = {
@@ -166,10 +185,11 @@
     // Bullet Object
     var bullet = {
         
+        // ***Position isn't updating when ship moves***
         position: {
             
-            x: userShipObject.shipTopPosition.x - 2,
-            y: userShipObject.shipTopPosition.y - 2
+            x: (userShipObject.shipTopPosition.x - 2),
+            y: (userShipObject.shipTopPosition.y - 2)
             
         },
         size: {
@@ -190,10 +210,10 @@
     onLoad();
 
     //Repeated function which takes care of the animation frames
-    function step()
+    function animate()
     {
         drawUserShip();
-        requestAnimationFrame(step);
+        requestAnimationFrame(animate);
     }
 
     //Adding an event listener so user can use keys to move ship
@@ -204,24 +224,27 @@
         {     
             //Move the ship to the right
             userShipObject.moveRight();       
-            console.log("Bullet positon is " + bullet.position.x);
+            /*console.log("Bullet positon is " + bullet.position.x);
+            console.log("Ship top positon is " + userShipObject.shipTopPosition.x);*/
             
         }
         else if(event.keyCode == 37)//If left arrow key is pressed
         {
             userShipObject.moveLeft();
-            console.log("Bullet positon is " + bullet.position.x);
+            /*console.log("Bullet positon is " + bullet.position.x);*/
         }
         else if(event.keyCode == 32)//If the spacebar is hit
         {
-              
-              moveBullet();
+              //Pass in the new values of where the ship is and update them in the moveBullet function
+              moveBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), 1);
+              //moveBullet();
+              console.log("X = " + (userShipObject.shipTopPosition.x - 2) + " Y = " + (userShipObject.shipTopPosition.y - 2));
         }
      
     });//End event listener
       
     //Call the step method 
-    step();
+    animate();
 
     </script>
 
