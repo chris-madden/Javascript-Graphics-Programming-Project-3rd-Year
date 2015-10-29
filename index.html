@@ -63,29 +63,6 @@
         ctx.closePath();
     }
     
-    // Bullet Object
-    var bullet = {
-        
-        position: {
-            
-            x: 50,
-            y: 600
-            
-        },
-        size: {
-            
-            width: 4,
-            height: 4
-            
-        },
-        velocity: {
-            
-            y: 10
-            
-        }
-        
-    }//End bullet object
-    
     //Draws the bullet
     function drawBullet(){
         
@@ -102,6 +79,8 @@
     
     //Function repeats using requestAnimationFrame which makes the bullet travel by itself after being shot
     function moveBullet(){
+        
+        drawBullet();
         
         // Collision detection for bullet with top of canvas
         if(bullet.position.y)
@@ -183,6 +162,29 @@
     
         }
     }//End of userShipObject
+    
+    // Bullet Object
+    var bullet = {
+        
+        position: {
+            
+            x: userShipObject.shipTopPosition.x - 2,
+            y: userShipObject.shipTopPosition.y - 2
+            
+        },
+        size: {
+            
+            width: 4,
+            height: 4
+            
+        },
+        velocity: {
+            
+            y: 10
+            
+        }
+        
+    }//End bullet object
 
     //Initialise size of canvas
     onLoad();
@@ -191,7 +193,6 @@
     function step()
     {
         drawUserShip();
-        drawBullet();
         requestAnimationFrame(step);
     }
 
@@ -203,20 +204,17 @@
         {     
             //Move the ship to the right
             userShipObject.moveRight();       
-            console.log("Ship left corner at " + userShipObject.shipLeftPostiton.x);
-            console.log("Ship right corner at " +userShipObject.shipRightPosition.x);
-            console.log("Ship top at " + userShipObject.shipTopPosition.x);
+            console.log("Bullet positon is " + bullet.position.x);
             
         }
         else if(event.keyCode == 37)//If left arrow key is pressed
         {
             userShipObject.moveLeft();
-            console.log("Ship left corner at " + userShipObject.shipLeftPostiton.x);
-            console.log("Ship right corner at " +userShipObject.shipRightPosition.x);
-            console.log("Ship top at " + userShipObject.shipTopPosition.x);
+            console.log("Bullet positon is " + bullet.position.x);
         }
         else if(event.keyCode == 32)//If the spacebar is hit
         {
+              
               moveBullet();
         }
      
