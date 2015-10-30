@@ -80,6 +80,9 @@
     //Function repeats using requestAnimationFrame which makes the bullet travel by itself after being shot
     function moveBullet(updatedX, updatedY, flag){
         
+        //Checking that bullet is still on canvas
+        var isAlive = true;
+        
         //Only update variable on first frame
         if(flag == 1)
         {
@@ -88,32 +91,32 @@
             bullet.position.y = updatedY; 
         }
         
-        drawBullet();
+         drawBullet();
           
         // ***Bullet is speeding up on each press of the space bar *** 
-        bullet.position.y -= bullet.velocity.y;
-        
-        console.log("velocity = " + bullet.velocity.y);
-        console.log("Y bullet position = " +  bullet.position.y);
+        if(bullet.position.y > 0)
+        { 
+            bullet.position.y -= bullet.velocity.y;
+        }
+        else
+        {
+            isAlive = false;
+            //Clear the canvas each time method is called
+            ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
             
+        }
+         
         //Repeat the function
         requestAnimationFrame(moveBullet);
-        
+               
         flag == 0;
+        
+        console.log("Bullet is alive: " + isAlive);
+        
+        return isAlive;
 
     }
     
-    /*function moveBullet(){
-         
-        drawBullet();
-        
-        bullet.position.y -= bullet.velocity.y;
-            
-        //Repeat the function
-        requestAnimationFrame(moveBullet);
-
-    }*/
-     
     //Object for the user Ship
     var userShipObject = {
         
@@ -185,7 +188,6 @@
     // Bullet Object
     var bullet = {
         
-        // ***Position isn't updating when ship moves***
         position: {
             
             x: (userShipObject.shipTopPosition.x - 2),
@@ -200,7 +202,7 @@
         },
         velocity: {
             
-            y: 10
+            y: 1
             
         }
         
@@ -238,12 +240,12 @@
               //Pass in the new values of where the ship is and update them in the moveBullet function
               moveBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), 1);
               //moveBullet();
-              console.log("X = " + (userShipObject.shipTopPosition.x - 2) + " Y = " + (userShipObject.shipTopPosition.y - 2));
+              //console.log("X = " + (userShipObject.shipTopPosition.x - 2) + " Y = " + (userShipObject.shipTopPosition.y - 2));
         }
      
     });//End event listener
       
-    //Call the step method 
+    //Call the animate method 
     animate();
 
     </script>
