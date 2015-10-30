@@ -69,10 +69,13 @@
         //Start path for drawing ship
         ctx.beginPath(); 
         
+        // Draw the square for the bullet
         ctx.rect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
         
+        // Fill the square with a solid colour
         ctx.fill();
         
+        // Close path to finish drawing square
         ctx.closePath();
         
     }
@@ -91,7 +94,8 @@
             bullet.position.y = updatedY; 
         }
         
-         drawBullet();
+        // Draw the bullet to the canvas
+        drawBullet();
           
         // ***Bullet is speeding up on each press of the space bar *** 
         if(bullet.position.y > 0)
@@ -100,8 +104,10 @@
         }
         else
         {
+            //changes to false when there's a collsion with the top of the canvas
             isAlive = false;
-            //Clear the canvas each time method is called
+            
+            //Clear the bullet from the canvas when it collides with top of canvas
             ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
             
         }
@@ -115,6 +121,19 @@
         
         return isAlive;
 
+    }
+    
+    function isBulletAlive(bulletAlive)
+    {
+        
+       // If bullet is not alive allow amother bullet to be fired
+       if(bulletAlive == false)
+       {
+           
+          moveBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), 1);
+           
+       }
+    
     }
     
     //Object for the user Ship
@@ -238,9 +257,15 @@
         else if(event.keyCode == 32)//If the spacebar is hit
         {
               //Pass in the new values of where the ship is and update them in the moveBullet function
-              moveBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), 1);
+              //moveBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), 1);
               //moveBullet();
               //console.log("X = " + (userShipObject.shipTopPosition.x - 2) + " Y = " + (userShipObject.shipTopPosition.y - 2));
+            
+              // Take the boolean value from the method
+              var bulletAlive = moveBullet();
+            
+              // Call the method with the updated boolean variable
+              isBulletAlive(bulletAlive);
         }
      
     });//End event listener
