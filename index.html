@@ -31,8 +31,8 @@
 
         // Global variables
         var bulletOnScreen = false; // Variable tracking if bullet is on screen or not
-        var positionFlag = 1; // Checks the top of ships position so bullet and respawn there
-
+        var positionFlag = 0; // Checks the top of ships position so bullet and respawn there
+    
         //Resizes canvas when file opened
         function onLoad() {
             canvas.width = 600;
@@ -78,8 +78,7 @@
 
             // Draw the bullet to the canvas
             drawBullet();
-
-            // ***Bullet is speeding up on each press of the space bar *** 
+            
             // Collision detection
             if (bullet.position.y > 0) {
                 bullet.position.y -= bullet.velocity.y;
@@ -177,7 +176,7 @@
 
             // Close path to finish drawing bullet
             ctx.closePath();
-
+            
         }
 
         // Bullet Object
@@ -205,9 +204,11 @@
 
         //Initialise size of canvas
         onLoad();
-
+        
         //Repeated function which takes care of the animation frames
-        function animate() {
+        function animate() 
+        {
+            
             drawUserShip();
 
             // If bullet has been fired and is onscreen
@@ -225,35 +226,24 @@
 
         //Adding an event listener so user can use keys to move ship
         window.addEventListener("keydown", function (event) {
-
-            //If right arrow key is pressed
-            if (event.keyCode == 39) {
-                //Move the ship to the right
+            
+            if (event.keyCode == 39) //If right arrow key is pressed
+            {   
                 userShipObject.moveRight();
+
             } else if (event.keyCode == 37) //If left arrow key is pressed
             {
                 userShipObject.moveLeft();
-            } else if (event.keyCode == 32) //If the spacebar is hit
+                
+            } else if (event.keyCode == 32 && bulletOnScreen == false) //If the spacebar is pressed and there is no bullet on the screen
             {
-
-                // ***Bullet Needs To Fire***
-
-                /*// Take the boolean value from the method
-                  var bulletAlive = moveBullet();
-            
-                  // Call the method with the updated boolean variable
-                  isBulletAlive(bulletAlive);*/
-
+                
                 // When bullet fires change variable to true
                 bulletOnScreen = true;
                 
-                // fireBullet function only works if the bullet has had a collsion
-                if(bullet.position.y <= 0)
-                {      
-                    fireBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), positionFlag);
-                }
-                    
- 
+                positionFlag = 1;
+                fireBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), positionFlag);
+                       
             }
 
         }); //End event listener
