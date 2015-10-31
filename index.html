@@ -20,259 +20,246 @@
 
 <body>
 
-  <canvas id="canvasOne"></canvas>
+    <canvas id="canvasOne"></canvas>
 
-<script type="text/javascript">
-    
-    // Gets a handle to the element with id canvasOne.
-    var canvas = document.getElementById("canvasOne");
+    <script type="text/javascript">
+        // Gets a handle to the element with id canvasOne.
+        var canvas = document.getElementById("canvasOne");
 
-    // Set the canvas up for drawing in 2D.
-    var ctx = canvas.getContext("2d");
+        // Set the canvas up for drawing in 2D.
+        var ctx = canvas.getContext("2d");
 
-    //Resizes canvas when file opened
-    function onLoad() {
-        canvas.width = 600;
-        canvas.height = 800;
-        drawUserShip();
-        console.log("Bullet Position Y " + bullet.position.y);
-    }
-    
-    //Draws the users ship to the canvas
-    function drawUserShip()
-    {
-        //Clear the canvas each time method is called
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        //Start path for drawing ship
-        ctx.beginPath(); 
-        
-        //Position the top of ship will be at
-        ctx.moveTo(userShipObject.shipTopPosition.x, userShipObject.shipTopPosition.y); 
-        
-        //Draw line to left corner of ship
-        ctx.lineTo(userShipObject.shipLeftPostiton.x, userShipObject.shipLeftPostiton.y); 
-        
-        //Draw line to right corner of ship
-        ctx.lineTo(userShipObject.shipRightPosition.x, userShipObject.shipRightPosition.y); 
-        
-        //Colour in the ship
-        ctx.fill();
-        
-        //Close the path
-        ctx.closePath();
-    }
-    
-    //Draws the bullet
-    function drawBullet(){
-         
-        //Start path for drawing ship
-        ctx.beginPath(); 
-        
-        // Draw the square for the bullet
-        ctx.rect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
-        
-        // Fill the square with a solid colour
-        ctx.fill();
-        
-        // Close path to finish drawing square
-        ctx.closePath();
-        
-    }
-    
-    //Function repeats using requestAnimationFrame which makes the bullet travel by itself after being shot
-    function moveBullet(updatedX, updatedY, flag){
-        
-        //Checking that bullet is still on canvas
-        var isAlive = true;
-        
-        //Only update variable on first frame
-        if(flag == 1)
-        {
-            //Update the bullet position with the ships location
-            bullet.position.x = updatedX;
-            bullet.position.y = updatedY; 
+        // Global variables
+        var bulletOnScreen = false; // Variable tracking if bullet is on screen or not
+        var positionFlag = 1; // Checks the top of ships position so bullet and respawn there
+
+        //Resizes canvas when file opened
+        function onLoad() {
+            canvas.width = 600;
+            canvas.height = 800;
+            drawUserShip();
         }
-        
-        // Draw the bullet to the canvas
-        drawBullet();
-          
-        // ***Bullet is speeding up on each press of the space bar *** 
-        if(bullet.position.y > 0)
-        { 
-            bullet.position.y -= bullet.velocity.y;
-        }
-        else
-        {
-            //changes to false when there's a collsion with the top of the canvas
-            isAlive = false;
-            
-            //Clear the bullet from the canvas when it collides with top of canvas
-            ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
-            
-        }
-         
-        //Repeat the function
-        requestAnimationFrame(moveBullet);
-               
-        flag == 0;
-        
-        console.log("Bullet is alive: " + isAlive);
-        
-        return isAlive;
 
-    }
-    
-    function isBulletAlive(bulletAlive)
-    {
-        
-       // If bullet is not alive allow amother bullet to be fired
-       if(bulletAlive == false)
-       {
-           
-          moveBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), 1);
-           
-       }
-    
-    }
-    
-    //Object for the user Ship
-    var userShipObject = {
-        
-        shipTopPosition: {
-            
-            x: 300,
-            y: 700
-            
-        },
-        shipLeftPostiton: {
-            
-            x: 275,
-            y: 725
-            
-        },
-        shipRightPosition: {
-            
-            x: 325,
-            y: 725
-        
-        },  
-        acceleration: {
-            
-            x: 7,
-            y: 0
-            
-        },
-        moveRight: function () {
-            
-            //If ships right corner isn't touching the edge of the canvas and is less than or equal to the canvas width - the acceleration value
-            if(userShipObject.shipRightPosition.x < canvas.width && userShipObject.shipRightPosition.x <= (canvas.width - userShipObject.acceleration.x))
-            {     
-                //Move the ship to the right along the x axis to the speed set in the acceleration object
-                userShipObject.shipTopPosition.x += userShipObject.acceleration.x;
-                userShipObject.shipLeftPostiton.x += userShipObject.acceleration.x;
-                userShipObject.shipRightPosition.x += userShipObject.acceleration.x;
+        //Draws the users ship to the canvas
+        function drawUserShip() {
+            //Clear the canvas each time method is called
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            //Start path for drawing ship
+            ctx.beginPath();
+
+            //Position the top of ship will be at
+            ctx.moveTo(userShipObject.shipTopPosition.x, userShipObject.shipTopPosition.y);
+
+            //Draw line to left corner of ship
+            ctx.lineTo(userShipObject.shipLeftPostiton.x, userShipObject.shipLeftPostiton.y);
+
+            //Draw line to right corner of ship
+            ctx.lineTo(userShipObject.shipRightPosition.x, userShipObject.shipRightPosition.y);
+
+            //Colour in the ship
+            ctx.fill();
+
+            //Close the path
+            ctx.closePath();
+        }
+
+        // *** MOVING BULLET CODE COMMENTED OUT ***
+
+        //Function repeats using requestAnimationFrame which makes the bullet travel by itself after being shot
+        function fireBullet(updatedX, updatedY, flag) {
+
+            //Only update variable on first frame
+            if (flag == 1) {
+                //Update the bullet position with the ships location
+                bullet.position.x = updatedX;
+                bullet.position.y = updatedY;
             }
-            //If ships postion is greater than the (canvas width - acceleration distance) E.G 595 > 590. Only move the number of pixels required to reach 600 (canvas.width)
-            else if(userShipObject.shipRightPosition.x > (canvas.width - userShipObject.acceleration.x))
+
+            // Draw the bullet to the canvas
+            drawBullet();
+
+            // ***Bullet is speeding up on each press of the space bar *** 
+            // Collision detection
+            if (bullet.position.y > 0) {
+                bullet.position.y -= bullet.velocity.y;
+            } 
+            else 
             {
-                //Move ship the pixels required to reach edge of canvas
-                userShipObject.shipTopPosition.x += (canvas.width - userShipObject.shipRightPosition.x);
-                userShipObject.shipLeftPostiton.x += (canvas.width - userShipObject.shipRightPosition.x);
-                userShipObject.shipRightPosition.x += (canvas.width - userShipObject.shipRightPosition.x);
+                //changes to false when there's a collsion with the top of the canvas
+                bulletOnScreen= false;
+
+                //Clear the bullet from the canvas when it collides with top of canvas
+                ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
+
+            }
+
+            flag == 0;
+
+        }
+
+        //Object for the user Ship
+        var userShipObject = {
+
+                shipTopPosition: {
+
+                    x: 300,
+                    y: 700
+
+                },
+                shipLeftPostiton: {
+
+                    x: 275,
+                    y: 725
+
+                },
+                shipRightPosition: {
+
+                    x: 325,
+                    y: 725
+
+                },
+                acceleration: {
+
+                    x: 7,
+                    y: 0
+
+                },
+                moveRight: function () {
+
+                    //If ships right corner isn't touching the edge of the canvas and is less than or equal to the canvas width - the acceleration value
+                    if (userShipObject.shipRightPosition.x < canvas.width && userShipObject.shipRightPosition.x <= (canvas.width - userShipObject.acceleration.x)) {
+                        //Move the ship to the right along the x axis to the speed set in the acceleration object
+                        userShipObject.shipTopPosition.x += userShipObject.acceleration.x;
+                        userShipObject.shipLeftPostiton.x += userShipObject.acceleration.x;
+                        userShipObject.shipRightPosition.x += userShipObject.acceleration.x;
+                    }
+                    //If ships postion is greater than the (canvas width - acceleration distance) E.G 595 > 590. Only move the number of pixels required to reach 600 (canvas.width)
+                    else if (userShipObject.shipRightPosition.x > (canvas.width - userShipObject.acceleration.x)) {
+                        //Move ship the pixels required to reach edge of canvas
+                        userShipObject.shipTopPosition.x += (canvas.width - userShipObject.shipRightPosition.x);
+                        userShipObject.shipLeftPostiton.x += (canvas.width - userShipObject.shipRightPosition.x);
+                        userShipObject.shipRightPosition.x += (canvas.width - userShipObject.shipRightPosition.x);
+                    }
+
+                },
+                moveLeft: function () {
+
+                    //If shipLeftPostiton.x is greater than 0 and greater than or equal to acceleration.x
+                    if (userShipObject.shipLeftPostiton.x > 0 && userShipObject.shipLeftPostiton.x >= userShipObject.acceleration.x) {
+                        //Move the ship to the left along the x axis to the speed set in the acceleration object
+                        userShipObject.shipTopPosition.x -= userShipObject.acceleration.x;
+                        userShipObject.shipLeftPostiton.x -= userShipObject.acceleration.x;
+                        userShipObject.shipRightPosition.x -= userShipObject.acceleration.x;
+                    } else if (userShipObject.shipLeftPostiton.x < userShipObject.acceleration.x) //shipLeftPostiton.x less than acceleration.x
+                    {
+                        //Move the ship to the left along the x axis to the amount of remaining pixels
+                        userShipObject.shipRightPosition.x -= userShipObject.shipLeftPostiton.x;
+                        userShipObject.shipTopPosition.x -= userShipObject.shipLeftPostiton.x;
+                        userShipObject.shipLeftPostiton.x -= userShipObject.shipLeftPostiton.x;
+                    }
+
+                }
+
+            } //End of userShipObject
+
+        //Draws the bullet
+        function drawBullet() {
+
+            //Start path for drawing ship
+            ctx.beginPath();
+
+            // Draw the square for the bullet
+            ctx.rect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
+
+            // Fill the square with a solid colour
+            ctx.fill();
+
+            // Close path to finish drawing bullet
+            ctx.closePath();
+
+        }
+
+        // Bullet Object
+        var bullet = {
+
+                position: {
+
+                    x: (userShipObject.shipTopPosition.x - 2),
+                    y: (userShipObject.shipTopPosition.y - 2)
+
+                },
+                size: {
+
+                    width: 4,
+                    height: 4
+
+                },
+                velocity: {
+
+                    y: 1
+
+                }
+
+            } //End bullet object
+
+        //Initialise size of canvas
+        onLoad();
+
+        //Repeated function which takes care of the animation frames
+        function animate() {
+            drawUserShip();
+
+            // If bullet has been fired and is onscreen
+            if (bulletOnScreen == true) {
+
+                //Run the fire method
+                fireBullet();
+                
+                // Prepares flag for updating ships position for when next bullet is fired
+                positionFlag = 1;
             }
             
-        },
-        moveLeft: function(){
-        
-            //If shipLeftPostiton.x is greater than 0 and greater than or equal to acceleration.x
-            if(userShipObject.shipLeftPostiton.x > 0 && userShipObject.shipLeftPostiton.x >= userShipObject.acceleration.x)
+            requestAnimationFrame(animate);
+        }
+
+        //Adding an event listener so user can use keys to move ship
+        window.addEventListener("keydown", function (event) {
+
+            //If right arrow key is pressed
+            if (event.keyCode == 39) {
+                //Move the ship to the right
+                userShipObject.moveRight();
+            } else if (event.keyCode == 37) //If left arrow key is pressed
             {
-                //Move the ship to the left along the x axis to the speed set in the acceleration object
-                userShipObject.shipTopPosition.x -= userShipObject.acceleration.x;
-                userShipObject.shipLeftPostiton.x -= userShipObject.acceleration.x;
-                userShipObject.shipRightPosition.x -= userShipObject.acceleration.x;
-            }
-            else if(userShipObject.shipLeftPostiton.x < userShipObject.acceleration.x)//shipLeftPostiton.x less than acceleration.x
+                userShipObject.moveLeft();
+            } else if (event.keyCode == 32) //If the spacebar is hit
             {
-                //Move the ship to the left along the x axis to the amount of remaining pixels
-                userShipObject.shipRightPosition.x -= userShipObject.shipLeftPostiton.x;
-                userShipObject.shipTopPosition.x -= userShipObject.shipLeftPostiton.x;
-                userShipObject.shipLeftPostiton.x -= userShipObject.shipLeftPostiton.x;  
+
+                // ***Bullet Needs To Fire***
+
+                /*// Take the boolean value from the method
+                  var bulletAlive = moveBullet();
+            
+                  // Call the method with the updated boolean variable
+                  isBulletAlive(bulletAlive);*/
+
+                // When bullet fires change variable to true
+                bulletOnScreen = true;
+                
+                // fireBullet function only works if the bullet has had a collsion
+                if(bullet.position.y <= 0)
+                {      
+                    fireBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), positionFlag);
+                }
+                    
+ 
             }
-    
-        }
-    }//End of userShipObject
-    
-    // Bullet Object
-    var bullet = {
-        
-        position: {
-            
-            x: (userShipObject.shipTopPosition.x - 2),
-            y: (userShipObject.shipTopPosition.y - 2)
-            
-        },
-        size: {
-            
-            width: 4,
-            height: 4
-            
-        },
-        velocity: {
-            
-            y: 1
-            
-        }
-        
-    }//End bullet object
 
-    //Initialise size of canvas
-    onLoad();
+        }); //End event listener
 
-    //Repeated function which takes care of the animation frames
-    function animate()
-    {
-        drawUserShip();
-        requestAnimationFrame(animate);
-    }
-
-    //Adding an event listener so user can use keys to move ship
-    window.addEventListener("keydown", function(event) { 
-
-        //If right arrow key is pressed
-        if (event.keyCode == 39)
-        {     
-            //Move the ship to the right
-            userShipObject.moveRight();       
-            /*console.log("Bullet positon is " + bullet.position.x);
-            console.log("Ship top positon is " + userShipObject.shipTopPosition.x);*/
-            
-        }
-        else if(event.keyCode == 37)//If left arrow key is pressed
-        {
-            userShipObject.moveLeft();
-            /*console.log("Bullet positon is " + bullet.position.x);*/
-        }
-        else if(event.keyCode == 32)//If the spacebar is hit
-        {
-              //Pass in the new values of where the ship is and update them in the moveBullet function
-              //moveBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), 1);
-              //moveBullet();
-              //console.log("X = " + (userShipObject.shipTopPosition.x - 2) + " Y = " + (userShipObject.shipTopPosition.y - 2));
-            
-              // Take the boolean value from the method
-              var bulletAlive = moveBullet();
-            
-              // Call the method with the updated boolean variable
-              isBulletAlive(bulletAlive);
-        }
-     
-    });//End event listener
-      
-    //Call the animate method 
-    animate();
-
+        //Call the animate method 
+        animate();
     </script>
 
 </body>
