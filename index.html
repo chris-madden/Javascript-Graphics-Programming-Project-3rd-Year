@@ -75,31 +75,52 @@
             this.width = width;
             this.height = height;
             
+            this.drawEnemy = function()
+            {
+                
+                 // Enemies are red
+                ctx.fillStyle = "rgb(255, 0, 0)";
+
+                //Start path for drawing ship
+                ctx.beginPath();
+
+                // Draw the square for the bullet
+                ctx.rect(this.posX, this.posY, this.width, this.height);
+
+                // Fill the square with a solid colour
+                ctx.fill();
+
+                // Close path to finish drawing bullet
+                ctx.closePath();
+
+            }
+            
+            // Collision needs to go here
+            
         }
         
+        var enemyArray = [];
         
-        
-        //Draws the enemy
-        function drawEnemy() {
+        function createEnemies()
+        {
             
-            // Enemies are red
-            ctx.fillStyle = "rgb(255, 0, 0)";
-
-            //Start path for drawing ship
-            ctx.beginPath();
+             var posX = 40; 
+            var posY = 40; 
+            var width = 50, height = 20;
             
-            // Draw the square for the bullet
-            ctx.rect(enemySquares.position.x, enemySquares.position.y, enemySquares.size.width, enemySquares.size.height);
-
-            // Fill the square with a solid colour
-            ctx.fill();
-
-            // Close path to finish drawing bullet
-            ctx.closePath();
-            
+            for(var i = 0; i < 3; i++)
+            {
+                 
+                enemyArray[i] = new enemies(posX, posY, width, height);
+                
+                enemyArray[i].drawEnemy();
+                
+                // move the next enemy accross the page
+                posX += 60
+                   
+            }// End for loop
+                      
         }
-
-        // *** MOVING BULLET CODE COMMENTED OUT ***
 
         //Function repeats using requestAnimationFrame which makes the bullet travel by itself after being shot
         function fireBullet(updatedX, updatedY, flag) {
@@ -261,7 +282,7 @@
         {
             
             drawUserShip();
-            drawEnemy();
+            createEnemies();
 
             // If bullet has been fired and is onscreen
             if (bulletOnScreen == true) {
