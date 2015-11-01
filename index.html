@@ -64,21 +64,23 @@
 
             //Close the path
             ctx.closePath();
-        }
+        }// End drawUserShip
         
         // Constructor for producing enemies
         function enemies(posX, posY, width, height)
         {
             
+            // Update the values for the current enemy 
             this.posX = posX;
             this. posY = posY;
             this.width = width;
             this.height = height;
             
+            // Draw the current enemy
             this.drawEnemy = function()
             {
                 
-                 // Enemies are red
+                // Enemies are red
                 ctx.fillStyle = "rgb(255, 0, 0)";
 
                 //Start path for drawing ship
@@ -97,22 +99,28 @@
             
             // Collision needs to go here
             
-        }
+        }// End enemies
         
+        // An arrray to hold enemies
         var enemyArray = [];
         
+        // Create enemies when called
         function createEnemies()
         {
-            
-             var posX = 40; 
+            // *** Need to be able to randomize positions from here ***
+            // Give positions and a size to the 
+            var posX = 40; 
             var posY = 40; 
             var width = 50, height = 20;
             
+            // Loop over array and and draw enemy to screen
             for(var i = 0; i < 3; i++)
             {
                  
+                // Create an enemy and put it into the array 
                 enemyArray[i] = new enemies(posX, posY, width, height);
                 
+                // Draw the enemy on to the screen
                 enemyArray[i].drawEnemy();
                 
                 // move the next enemy accross the page
@@ -120,7 +128,7 @@
                    
             }// End for loop
                       
-        }
+        }// End createEnemies
 
         //Function repeats using requestAnimationFrame which makes the bullet travel by itself after being shot
         function fireBullet(updatedX, updatedY, flag) {
