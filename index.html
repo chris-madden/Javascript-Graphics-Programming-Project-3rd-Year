@@ -44,6 +44,8 @@
         function drawUserShip() {
             //Clear the canvas each time method is called
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = "rgb(0, 255, 0)";
 
             //Start path for drawing ship
             ctx.beginPath();
@@ -62,6 +64,39 @@
 
             //Close the path
             ctx.closePath();
+        }
+        
+        // Constructor for producing enemies
+        function enemies(posX, posY, width, height)
+        {
+            
+            this.posX = posX;
+            this. posY = posY;
+            this.width = width;
+            this.height = height;
+            
+        }
+        
+        
+        
+        //Draws the enemy
+        function drawEnemy() {
+            
+            // Enemies are red
+            ctx.fillStyle = "rgb(255, 0, 0)";
+
+            //Start path for drawing ship
+            ctx.beginPath();
+            
+            // Draw the square for the bullet
+            ctx.rect(enemySquares.position.x, enemySquares.position.y, enemySquares.size.width, enemySquares.size.height);
+
+            // Fill the square with a solid colour
+            ctx.fill();
+
+            // Close path to finish drawing bullet
+            ctx.closePath();
+            
         }
 
         // *** MOVING BULLET CODE COMMENTED OUT ***
@@ -179,6 +214,8 @@
         //Draws the bullet
         function drawBullet() {
 
+            ctx.fillStyle = "rgb(0, 100, 0)";
+            
             //Start path for drawing ship
             ctx.beginPath();
 
@@ -215,7 +252,7 @@
                 }
 
             } //End bullet object
-
+        
         //Initialise size of canvas
         onLoad();
         
@@ -224,6 +261,7 @@
         {
             
             drawUserShip();
+            drawEnemy();
 
             // If bullet has been fired and is onscreen
             if (bulletOnScreen == true) {
