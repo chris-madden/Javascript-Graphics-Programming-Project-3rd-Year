@@ -31,7 +31,7 @@
 
         // Global variables
         var bulletOnScreen = false; // Variable tracking if bullet is on screen or not
-        var positionFlag = 0; // Checks the top of ships position so bullet and respawn there
+        var positionFlag = 0; // Used as an access variable to update the bullets postion with the new ship postion
     
         //Resizes canvas when file opened
         function onLoad() {
@@ -79,10 +79,23 @@
             // Draw the bullet to the canvas
             drawBullet();
             
-            // Collision detection
-            if (bullet.position.y > 0) {
+            // If position of top of the bullet is greater than the bullet height (4)
+            if (bullet.position.y >= 0){
+                
                 bullet.position.y -= bullet.velocity.y;
+                console.log("\n**bullet Positon " + bullet.position.y + "***");
             } 
+            /*else if(bullet.position.y < bullet.velocity.y) // If position of top of bullet is less than the bullet velocity (10)
+            {
+                
+                bullet.position.y -= bullet.position.y;
+                bulletOnScreen= false;
+                
+                //Clear the bullet from the canvas when it collides with top of canvas
+                /*ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
+                console.log("\n**bullet Positon " + bullet.position.y + "***");
+                
+            }*/
             else 
             {
                 //changes to false when there's a collsion with the top of the canvas
@@ -92,7 +105,8 @@
                 ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
 
             }
-
+            
+            // Reset flag
             flag == 0;
 
         }
@@ -196,7 +210,7 @@
                 },
                 velocity: {
 
-                    y: 1
+                    y: 10
 
                 }
 
@@ -241,6 +255,7 @@
                 // When bullet fires change variable to true
                 bulletOnScreen = true;
                 
+                // Set to 1 so bullet position can be updated with the ships new position
                 positionFlag = 1;
                 fireBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), positionFlag);
                        
