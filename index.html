@@ -122,20 +122,10 @@
                enemy.position.y += 1;
                
            }
-           
-           if(enemy.position.y == 400)
-           { 
-               
-               console.log("I've reached 400!!");
-               
-           }
-            
+             
            // if the top of user ship hits the bottom of the enemy
-           if((enemy.position.y + enemy.size.height) ==  userShipObject.shipTopPosition.y && userShipObject.shipTopPosition.x >= enemy.position.x &&                    userShipObject.shipTopPosition.x <= (enemy.position.x + enemy.size.width))
-           {
-               
-               console.log("I've hit the ship!!!!");
-                
+           if((enemy.position.y + enemy.size.height) ==  userShipObject.shipTopPosition.y && userShipObject.shipTopPosition.x >= enemy.position.x &&                                            userShipObject.shipTopPosition.x <= (enemy.position.x + enemy.size.width))
+           {    
                
                // Game over
                // Stop drawing the ship 
@@ -160,10 +150,8 @@
                hitShip = true;
                
            }
-            
-            //console.log("Top of ship X,Y = " + userShipObject.shipTopPosition.x + "," + userShipObject.shipTopPosition.y);
-            
-        }
+             
+        } // End moveEnemy 
         
         
           
