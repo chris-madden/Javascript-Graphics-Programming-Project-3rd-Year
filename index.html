@@ -93,7 +93,7 @@
             
              position: {
 
-                    x: 275,
+                    x: 450,
                     y: 300
                    
                 },
@@ -111,7 +111,7 @@
             
         }
         
-        //Function for moving enemy
+         //Function for moving enemy
         function moveEnemy()
         {
            
@@ -130,22 +130,42 @@
                
            }
             
-                // Senses if it hits the top of the ship                                    User ship top is at bottom left of enemy 
-           if((enemy.position.y + enemy.size.height) ==  userShipObject.shipTopPosition.y && userShipObject.shipTopPosition.x >= enemy.position.x && userShipObject.shipTopPosition.x <= (enemy.position.x + enemy.size.width))
+           // if the top of user ship hits the bottom of the enemy
+           if((enemy.position.y + enemy.size.height) ==  userShipObject.shipTopPosition.y && userShipObject.shipTopPosition.x >= enemy.position.x &&                    userShipObject.shipTopPosition.x <= (enemy.position.x + enemy.size.width))
            {
                
                console.log("I've hit the ship!!!!");
                 
-               // Clear user ship from screen when hit by enemy
-               ctx.clearRect(userShipObject.shipLeftPostiton.x, userShipObject.shipTopPosition.y, userShipObject.shipRightPosition.x, userShipObject.shipRightPosition.y);
                
+               // Game over
+               // Stop drawing the ship 
+               hitShip = true;
+               
+           }// if left corner of ship hits the enemy
+           else if(userShipObject.shipLeftPostiton.x >= enemy.position.x && userShipObject.shipLeftPostiton.x <= (enemy.position.x + enemy.size.width) &&
+                   userShipObject.shipLeftPostiton.y >= enemy.position.y && userShipObject.shipLeftPostiton.y <= (enemy.position.y + enemy.size.height))
+           {
+               
+               // Game over
+               // Stop drawing the ship 
+               hitShip = true;
+               
+           }// if right corner of ship hits enemy
+           else if(userShipObject.shipRightPosition.x >= enemy.position.x && userShipObject.shipRightPosition.x <= (enemy.position.x + enemy.size.width) &&
+                  userShipObject.shipRightPosition.y >= enemy.position.y && userShipObject.shipRightPosition.y <= (enemy.position.y + enemy.size.height))
+           {
+               
+               // Game over
+               // Stop drawing the ship 
                hitShip = true;
                
            }
             
-            console.log("Top of ship X,Y = " + userShipObject.shipTopPosition.x + "," + userShipObject.shipTopPosition.y);
+            //console.log("Top of ship X,Y = " + userShipObject.shipTopPosition.x + "," + userShipObject.shipTopPosition.y);
             
         }
+        
+        
           
         //Function repeats when it's called in animate which makes the bullet travel by itself after being shot
         function fireBullet(updatedX, updatedY, flag) {
@@ -249,6 +269,9 @@
                 }
 
             } //End of userShipObject
+        
+        
+       
 
         // Draw bullet and create bullet object
         // ====================================
