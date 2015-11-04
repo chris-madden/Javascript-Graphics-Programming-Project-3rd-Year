@@ -32,7 +32,7 @@
         // Global variables
         var bulletOnScreen = false; // Variable tracking if bullet is on screen or not
         var positionFlag = 0; // Used as an access variable to update the bullets postion with the new ship position
-        var hitEnemy = false;
+        var hitShip = false;
     
         //Resizes canvas when file opened
         function onLoad() {
@@ -114,7 +114,8 @@
         //Function for moving enemy
         function moveEnemy()
         {
-            
+           
+           // Enemy falls from top of canvas until it reaches the bottom
            if((enemy.position.y + enemy.size.height) < canvas.height)
            {
                
@@ -129,15 +130,16 @@
                
            }
             
-           // Senses if it hits the top of the ship but WILL TRIGGER ON ANY X VALUE
-           if((enemy.position.y + enemy.size.height) ==  userShipObject.shipTopPosition.y)
+                // Senses if it hits the top of the ship                                    User ship top is at bottom left of enemy 
+           if((enemy.position.y + enemy.size.height) ==  userShipObject.shipTopPosition.y && userShipObject.shipTopPosition.x >= enemy.position.x && userShipObject.shipTopPosition.x <= (enemy.position.x + enemy.size.width))
            {
                
                console.log("I've hit the ship!!!!");
-               //ctx.clearRect(enemy.position.x, enemy.position.y, enemy.size.width, enemy.size.height);
+                
+               // Clear user ship from screen when hit by enemy
                ctx.clearRect(userShipObject.shipLeftPostiton.x, userShipObject.shipTopPosition.y, userShipObject.shipRightPosition.x, userShipObject.shipRightPosition.y);
                
-               hitEnemy = true;
+               hitShip = true;
                
            }
             
@@ -164,13 +166,7 @@
                 bullet.position.y -= bullet.velocity.y;
                 //console.log("\n**bullet Positon " + bullet.position.y + "***");
             }                                                                       
-           /* else if(bullet.position.y == (enemy.position.y + enemy.size.height) && 
-                   (bullet.position.x + bullet.size.width) == enemy.position.y || bullet.position.x == enemy.position.y)// If right corner of bullet hits enemy or Left corner of bullet hits enemy
-            {
-                
-                console.log("Bullet hits enemy!!!!! at " + bullet.position.x + " " + bullet.position.y);
-                
-            }*/
+          
             else 
             {
                 //changes to false when there's a collsion with the top of the canvas
@@ -180,23 +176,14 @@
                 ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
 
             }
-            
-            /*else if(bullet.position.y < bullet.velocity.y) // If position of top of bullet is less than the bullet velocity (10)
-            {
-                
-                bullet.position.y -= bullet.position.y;
-                bulletOnScreen= false;
-                
-                //Clear the bullet from the canvas when it collides with top of canvas
-                /*ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
-                console.log("\n**bullet Positon " + bullet.position.y + "***");
-                
-            }*/
-            
+          
             // Reset flag
             flag == 0;
 
         }
+        
+        // Create object for user ship
+        // ===========================
 
         //Object for the user Ship
         var userShipObject = {
@@ -263,6 +250,9 @@
 
             } //End of userShipObject
 
+        // Draw bullet and create bullet object
+        // ====================================
+        
         //Draws the bullet
         function drawBullet() {
 
@@ -284,7 +274,8 @@
 
         // Bullet Object
         var bullet = {
-
+                
+                // Bullet shoots from top of ship
                 position: {
 
                     x: (userShipObject.shipTopPosition.x - 2),
@@ -305,6 +296,9 @@
 
             } //End bullet object
         
+        // Start running game from here
+        // =============================
+        
         //Initialise size of canvas
         onLoad();
         
@@ -315,7 +309,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             // Draw user ship if it hasn't been hit
-            if(hitEnemy == false)
+            if(hitShip == false)
             {
                 drawUserShip();
             }
