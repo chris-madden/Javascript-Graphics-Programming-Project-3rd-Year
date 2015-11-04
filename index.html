@@ -86,47 +86,7 @@
             ctx.closePath();
 
         }
-        
-        /*function Enemies(posX, posY, width, height)
-        {
-            
-            this.posX = posX;
-            this.posY = posY;
-            this.width = width;
-            this.height = height;
-            
-            //Draw the enemy each time a new one is created
-            this.drawEnemy = function(posX, posY, width, height){
-                
-                // Enemies are red
-                ctx.fillStyle = "rgb(255, 0, 0)";
-    
-                //Start path for drawing ship
-                ctx.beginPath();
-    
-                // Draw the square for the bullet
-                ctx.rect(this.posX, this.posY, this.width, this.height);
-    
-                // Fill the square with a solid colour
-                ctx.fill();
-    
-                // Close path to finish drawing bullet
-                ctx.closePath();
-                
-            }
-            
-            Enemies.prototype.move = function()
-            {
-                
-                posY += 1;
-                
-            }
-           
-            
-        }
-        
-        enemy1 = new Enemies(40, 40, 50, 50);*/
-        
+       
         //Enemy object
         var enemy = {
             
@@ -154,8 +114,28 @@
         function moveEnemy()
         {
             
-            // Move enemy down screen
-            enemy.position.y += 1;
+            // if the bottom of the enemy is not touching the canvas
+            if((enemy.position.y + enemy.size.height) < canvas.height)
+            {
+                
+                // Move enemy down screen
+                enemy.position.y += 1;
+                
+            }
+            else if((enemy.position.y + enemy.size.height) == canvas.height)// if the bottom of enemy is touching the canvas game is over
+            {
+                
+                //ctx.clearRect(enemy.position.x, enemy.position.y, enemy.size.width, enemy.size.height);
+                
+                //console.log("Game over");
+                
+            }
+            else if((enemy.position.y + enemy.size.height) == bullet.position.y && (enemy.position.y + enemy.size.height) == bullet.position.x) // if bullet hits the bottom of the enemy
+            {
+                
+                //ctx.clearRect(enemy.position.x, enemy.position.y, enemy.size.width, enemy.size.height);
+                
+            }
             
         }
           
@@ -176,8 +156,24 @@
             if (bullet.position.y >= 0){
                 
                 bullet.position.y -= bullet.velocity.y;
-                console.log("\n**bullet Positon " + bullet.position.y + "***");
+                //console.log("\n**bullet Positon " + bullet.position.y + "***");
             } 
+            else if(bullet.position.y == (enemy.position.y + enemy.size.height))
+            {
+                
+                console.log("Bullet hits enemy!!!!! at " + bullet.position.y);
+                
+            }
+            else 
+            {
+                //changes to false when there's a collsion with the top of the canvas
+                bulletOnScreen= false;
+
+                //Clear the bullet from the canvas when it collides with top of canvas
+                ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
+
+            }
+            
             /*else if(bullet.position.y < bullet.velocity.y) // If position of top of bullet is less than the bullet velocity (10)
             {
                 
@@ -189,15 +185,6 @@
                 console.log("\n**bullet Positon " + bullet.position.y + "***");
                 
             }*/
-            else 
-            {
-                //changes to false when there's a collsion with the top of the canvas
-                bulletOnScreen= false;
-
-                //Clear the bullet from the canvas when it collides with top of canvas
-                ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
-
-            }
             
             // Reset flag
             flag == 0;
