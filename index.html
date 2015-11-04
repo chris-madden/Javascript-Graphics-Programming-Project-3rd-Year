@@ -32,6 +32,7 @@
         // Global variables
         var bulletOnScreen = false; // Variable tracking if bullet is on screen or not
         var positionFlag = 0; // Used as an access variable to update the bullets postion with the new ship position
+        var hitEnemy = false;
     
         //Resizes canvas when file opened
         function onLoad() {
@@ -42,8 +43,8 @@
 
         //Draws the users ship to the canvas
         function drawUserShip() {
-            //Clear the canvas each time method is called
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            /*//Clear the canvas each time method is called
+            ctx.clearRect(0, 0, canvas.width, canvas.height);*/
             
             ctx.fillStyle = "rgb(0, 255, 0)";
 
@@ -92,9 +93,9 @@
             
              position: {
 
-                    x: 40,
-                    y: 40
-
+                    x: 275,
+                    y: 300
+                   
                 },
                 size: {
 
@@ -114,28 +115,33 @@
         function moveEnemy()
         {
             
-            // if the bottom of the enemy is not touching the canvas
-            if((enemy.position.y + enemy.size.height) < canvas.height)
-            {
-                
-                // Move enemy down screen
-                enemy.position.y += 1;
-                
-            }
-            else if((enemy.position.y + enemy.size.height) == canvas.height)// if the bottom of enemy is touching the canvas game is over
-            {
-                
-                //ctx.clearRect(enemy.position.x, enemy.position.y, enemy.size.width, enemy.size.height);
-                
-                //console.log("Game over");
-                
-            }
-            else if((enemy.position.y + enemy.size.height) == bullet.position.y && (enemy.position.y + enemy.size.height) == bullet.position.x) // if bullet hits the bottom of the enemy
-            {
-                
-                //ctx.clearRect(enemy.position.x, enemy.position.y, enemy.size.width, enemy.size.height);
-                
-            }
+           if((enemy.position.y + enemy.size.height) < canvas.height)
+           {
+               
+               enemy.position.y += 1;
+               
+           }
+           
+           if(enemy.position.y == 400)
+           { 
+               
+               console.log("I've reached 400!!");
+               
+           }
+            
+           // Senses if it hits the top of the ship but WILL TRIGGER ON ANY X VALUE
+           if((enemy.position.y + enemy.size.height) ==  userShipObject.shipTopPosition.y)
+           {
+               
+               console.log("I've hit the ship!!!!");
+               //ctx.clearRect(enemy.position.x, enemy.position.y, enemy.size.width, enemy.size.height);
+               ctx.clearRect(userShipObject.shipLeftPostiton.x, userShipObject.shipTopPosition.y, userShipObject.shipRightPosition.x, userShipObject.shipRightPosition.y);
+               
+               hitEnemy = true;
+               
+           }
+            
+            console.log("Top of ship X,Y = " + userShipObject.shipTopPosition.x + "," + userShipObject.shipTopPosition.y);
             
         }
           
@@ -157,13 +163,14 @@
                 
                 bullet.position.y -= bullet.velocity.y;
                 //console.log("\n**bullet Positon " + bullet.position.y + "***");
-            } 
-            else if(bullet.position.y == (enemy.position.y + enemy.size.height))
+            }                                                                       
+           /* else if(bullet.position.y == (enemy.position.y + enemy.size.height) && 
+                   (bullet.position.x + bullet.size.width) == enemy.position.y || bullet.position.x == enemy.position.y)// If right corner of bullet hits enemy or Left corner of bullet hits enemy
             {
                 
-                console.log("Bullet hits enemy!!!!! at " + bullet.position.y);
+                console.log("Bullet hits enemy!!!!! at " + bullet.position.x + " " + bullet.position.y);
                 
-            }
+            }*/
             else 
             {
                 //changes to false when there's a collsion with the top of the canvas
@@ -304,11 +311,18 @@
         //Repeated function which takes care of the animation frames
         function animate() 
         {
+            //Clear the canvas each time method is called
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            drawUserShip();
+            // Draw user ship if it hasn't been hit
+            if(hitEnemy == false)
+            {
+                drawUserShip();
+            }
+            
             drawEnemy();
-            moveEnemy();
-                 
+            moveEnemy(); 
+           
             // If bullet has been fired and is onscreen
             if (bulletOnScreen == true) {
 
