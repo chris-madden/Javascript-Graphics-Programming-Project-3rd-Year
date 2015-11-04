@@ -31,7 +31,7 @@
 
         // Global variables
         var bulletOnScreen = false; // Variable tracking if bullet is on screen or not
-        var positionFlag = 0; // Used as an access variable to update the bullets postion with the new ship postion
+        var positionFlag = 0; // Used as an access variable to update the bullets postion with the new ship position
     
         //Resizes canvas when file opened
         function onLoad() {
@@ -66,71 +66,100 @@
             ctx.closePath();
         }// End drawUserShip
         
-        // Constructor for producing enemies
-        function enemies(posX, posY, width, height)
+        //Draw an enemy
+        function drawEnemy() 
         {
             
-            // Update the values for the current enemy 
+            // Enemies are red
+            ctx.fillStyle = "rgb(255, 0, 0)";
+
+            //Start path for drawing ship
+            ctx.beginPath();
+
+            // Draw the square for the bullet
+            ctx.rect(enemy.position.x, enemy.position.y, enemy.size.width, enemy.size.height);
+
+            // Fill the square with a solid colour
+            ctx.fill();
+
+            // Close path to finish drawing bullet
+            ctx.closePath();
+
+        }
+        
+        /*function Enemies(posX, posY, width, height)
+        {
+            
             this.posX = posX;
-            this. posY = posY;
+            this.posY = posY;
             this.width = width;
             this.height = height;
             
-            // Draw the current enemy
-            this.drawEnemy = function()
-            {
+            //Draw the enemy each time a new one is created
+            this.drawEnemy = function(posX, posY, width, height){
                 
                 // Enemies are red
                 ctx.fillStyle = "rgb(255, 0, 0)";
-
+    
                 //Start path for drawing ship
                 ctx.beginPath();
-
+    
                 // Draw the square for the bullet
                 ctx.rect(this.posX, this.posY, this.width, this.height);
-
+    
                 // Fill the square with a solid colour
                 ctx.fill();
-
+    
                 // Close path to finish drawing bullet
                 ctx.closePath();
-
+                
             }
             
-            // Collision needs to go here
-            
-        }// End enemies
-        
-        // An arrray to hold enemies
-        var enemyArray = [];
-        
-        // Create enemies when called
-        function createEnemies()
-        {
-            // *** Need to be able to randomize positions from here ***
-            // Give positions and a size to the 
-            var posX = 40; 
-            var posY = 40; 
-            var width = 50, height = 20;
-            
-            // Loop over array and and draw enemy to screen
-            for(var i = 0; i < 3; i++)
+            Enemies.prototype.move = function()
             {
-                 
-                // Create an enemy and put it into the array 
-                enemyArray[i] = new enemies(posX, posY, width, height);
                 
-                // Draw the enemy on to the screen
-                enemyArray[i].drawEnemy();
+                posY += 1;
                 
-                // move the next enemy accross the page
-                posX += 60
-                   
-            }// End for loop
-                      
-        }// End createEnemies
+            }
+           
+            
+        }
+        
+        enemy1 = new Enemies(40, 40, 50, 50);*/
+        
+        //Enemy object
+        var enemy = {
+            
+             position: {
 
-        //Function repeats using requestAnimationFrame which makes the bullet travel by itself after being shot
+                    x: 40,
+                    y: 40
+
+                },
+                size: {
+
+                    width: 50,
+                    height: 50
+
+                },
+                velocity: {
+
+                    y: 5
+
+                }
+            
+        }
+        
+        //Function for moving enemy
+        function moveEnemy()
+        {
+            
+            // Move enemy down screen
+            enemy.position.y += 1;
+            
+        }
+          
+        //Function repeats when it's called in animate which makes the bullet travel by itself after being shot
         function fireBullet(updatedX, updatedY, flag) {
 
             //Only update variable on first frame
@@ -290,8 +319,9 @@
         {
             
             drawUserShip();
-            createEnemies();
-
+            drawEnemy();
+            moveEnemy();
+                 
             // If bullet has been fired and is onscreen
             if (bulletOnScreen == true) {
 
