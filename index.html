@@ -25,9 +25,10 @@
     <script type="text/javascript">
         
         // ************************** LEFT TO DO *****************************************
-        
-        // 1. Add collisionn between bullet and enemy
+        // 1. Make bullet disappear when it hits enemy
         // 2. Have enemy respawn when when hit 
+        //      a. Make enemy appear in random area
+        //      b. Make enemy respawn 
         // 3. End game when user ship is killed or enemy reaches bottom of canvas
         // 4. Add colision to angle side of ship
         // 5. Make ship movement smoother
@@ -45,12 +46,17 @@
         var positionFlag = 0; // Used as an access variable to update the bullets postion with the new ship position
         var hitShip = false;
         var hitEnemy = false;
+        var safeSpaceX = 5; // The closest distance the enemy can appear on the x axis
+        var safeSpaceY = 5; // The closest distance the enemy can appear on the y axis
     
         //Resizes canvas when file opened
         function onLoad() {
             canvas.width = 600;
             canvas.height = 800;
             drawUserShip();
+            
+            // Draw enemy at a random postion on load
+            randomEnemyPosition();
         }
 
         //Draws the users ship to the canvas
@@ -108,8 +114,8 @@
             
              position: {
 
-                    x: 450,
-                    y: 300
+                    x: 10,
+                    y: 10
                    
                 },
                 size: {
@@ -125,6 +131,28 @@
                 }
             
         }
+        
+        // === REFERENCE THIS IN THE README FILE (FROM OFFICIAL MOZILLA WEBSITE https://developer.mozilla.org/en-                                                               US/docs/Web/JavaScript/Reference/Global_Objects/Math/random)=========
+        function getRandomIntInclusive(min, max) {
+              return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+        
+        function randomEnemyPosition()
+        {
+            
+            var minX = 0 + safeSpaceX; //
+            var maxX = canvas.width - safeSpaceX - enemy.size.width; // Should max out at 545
+            
+            // Randomly generate x position
+            enemy.position.x = getRandomIntInclusive(minX, maxX);
+            
+            var minY = 0 + safeSpaceY;
+            var maxY = canvas.height / safeSpaceY;
+            
+            // Randomly generate y position
+            enemy.position.y =  getRandomIntInclusive(minY, maxY);
+            
+        }// End randomEnemyPosition
         
          //Function for moving enemy
         function moveEnemy()
@@ -201,7 +229,7 @@
 
             }
             
-            // If top of bullet is higher than bottom of bullet             left corner of bullet   is between the two corners of the enemy
+            // If top of bullet is higher than bottom of bullet and left corner of bullet is between the two corners of the enemy
             if(bullet.position.y <= (enemy.position.y + enemy.size.height) && bullet.position.x >= enemy.position.x && bullet.position.x <= (enemy.position.x +                                 enemy.size.width))
             {
                 // Stop drawing enemy
@@ -210,7 +238,8 @@
             else if(bullet.position.y <= (enemy.position.y + enemy.size.height) && (bullet.position.x + bullet.size.width) >= enemy.position.x && (bullet.position.x + bullet.size.width) <= (enemy.position.x + enemy.size.width))
             {
                 
-                
+                // Stop drawing enemy
+                hitEnemy = true;
             }
           
             // Reset flag
@@ -358,8 +387,8 @@
             {
                 drawEnemy();
                 moveEnemy(); 
+                
             }
-           
            
             // If bullet has been fired and is onscreen
             if (bulletOnScreen == true) {
