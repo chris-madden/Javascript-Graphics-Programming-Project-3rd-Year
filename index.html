@@ -26,7 +26,8 @@
         
         // ************************** LEFT TO DO *****************************************
         
-        // 1. Add colision to angle side of ship
+        // 1. Get collision between bullet and enemy right
+        // 2. Add colision to angle side of ship
         // 3. End game when user ship is killed or enemy reaches bottom of canvas
         // 4. Make ship movement smoother
         // 5. Add code that can handle the enemy moving faster
@@ -48,6 +49,7 @@
         var safeSpaceX = 5; // The closest distance the enemy can appear on the x axis
         var safeSpaceY = 5; // The closest distance the enemy can appear on the y axis
         var score = 0;
+        var aDown = false, dDown = false, leftArrowDown = false, rightArrowDown = false; // Tracks which keys are being pressed or released
     
         //Resizes canvas when file opened
         function onLoad() {
@@ -411,6 +413,9 @@
 
             } //End bullet object
         
+        
+       
+        
         // Start running game from here
         // =============================
         
@@ -453,7 +458,17 @@
                 // Prepares flag for updating ships position for when next bullet is fired
                 positionFlag = 1;
             }
-         
+            
+            // Move ship 
+            if(aDown === true || leftArrowDown === true)
+            {
+                userShipObject.moveLeft();
+            }
+            else if(dDown === true || rightArrowDown === true)
+            {   
+                 userShipObject.moveRight();
+            }
+            
             requestAnimationFrame(animate);
 
         }
@@ -463,11 +478,11 @@
             
             if (event.keyCode == 39) //If right arrow key is pressed
             {   
-                userShipObject.moveRight();
-
+                rightArrowDown = true;
+                
             } else if (event.keyCode == 37) //If left arrow key is pressed
             {
-                userShipObject.moveLeft();
+                leftArrowDown = true;
                 
             } else if (event.keyCode == 32 && bulletOnScreen == false) //If the spacebar is pressed and there is no bullet on the screen
             {
@@ -479,6 +494,37 @@
                 positionFlag = 1;
                 fireBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), positionFlag);
                        
+            }
+            else if(event.keyCode == 65)// If W is pressed
+            {
+                aDown = true;
+            }
+            else if(event.keyCode == 68)// If D is pressed
+            {
+                dDown = true;
+            }
+
+        }); //End event listener
+        
+         //Adding an event listener so user can use keys to move ship
+        window.addEventListener("keyup", function (event) {
+            
+            if(event.keyCode == 65)// If A is released
+            {
+
+                aDown = false;
+            }
+            else if(event.keyCode == 68)// If D is released
+            {
+                dDown = false;
+            }
+            else if(event.keyCode == 39)// If right arrow key is pressed
+            {  
+                rightArrowDown = false;
+            }
+            else if(event.keyCode == 37)// If left arrow key is pressed
+            {
+                leftArrowDown = false;
             }
 
         }); //End event listener
