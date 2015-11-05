@@ -196,6 +196,19 @@
              
         } // End moveEnemy 
         
+        // A function to redraw the enemy in a new random position after it's been hit
+        function respawnEnemy()
+        {
+            
+            randomEnemyPosition();
+            drawEnemy();
+            
+            hitEnemy = false;
+            
+            console.log(hitEnemy);
+            
+        }
+        
         
         // Firing the bullet
         // =================
@@ -212,6 +225,9 @@
 
             // Draw the bullet to the canvas
             drawBullet();
+            
+            // Bullet Collsion
+            // ===============
             
             // If bullet hits top of canvas
             if (bullet.position.y >= 0){
@@ -389,6 +405,11 @@
                 moveEnemy(); 
                 
             }
+            else if(hitEnemy == true)
+            {
+                 respawnEnemy()
+
+            }
            
             // If bullet has been fired and is onscreen
             if (bulletOnScreen == true) {
@@ -399,8 +420,9 @@
                 // Prepares flag for updating ships position for when next bullet is fired
                 positionFlag = 1;
             }
-            
+         
             requestAnimationFrame(animate);
+
         }
 
         //Adding an event listener so user can use keys to move ship
