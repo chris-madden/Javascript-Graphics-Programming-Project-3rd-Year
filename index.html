@@ -27,7 +27,6 @@
         // ************************** LEFT TO DO *****************************************
         
         // 1. Add colision to angle side of ship
-        // 2. Make bullet disappear when it hits enemy 
         // 3. End game when user ship is killed or enemy reaches bottom of canvas
         // 4. Make ship movement smoother
         // 5. Add code that can handle the enemy moving faster
@@ -45,6 +44,7 @@
         var positionFlag = 0; // Used as an access variable to update the bullets postion with the new ship position
         var hitShip = false;
         var hitEnemy = false;
+        var bulletDead = false;
         var safeSpaceX = 5; // The closest distance the enemy can appear on the x axis
         var safeSpaceY = 5; // The closest distance the enemy can appear on the y axis
         var score = 0;
@@ -166,7 +166,7 @@
                
            }
              
-           // if the top of user ship hits the bottom of the enemy
+           //if the top of user ship hits the bottom of the enemy
            if((enemy.position.y + enemy.size.height) ==  userShipObject.shipTopPosition.y && userShipObject.shipTopPosition.x >= enemy.position.x &&                                            userShipObject.shipTopPosition.x <= (enemy.position.x + enemy.size.width))
            {    
                
@@ -192,13 +192,15 @@
                // Stop drawing the ship 
                hitShip = true;
                
-           }       //************* if bottom of enemy ***************                           ****** Right side of enemy **********   ***Collides with left side of ship***
-           else if((enemy.position.y + enemy.size.height) >= userShipObject.shipTopPosition.y && (enemy.position.x + enemy.size.width) > userShipObject.shipLeftPostiton.x &&                       enemy.position.x < userShipObject.shipTopPosition.x)// Judge if collision has occurred with side of ship
+           }
+           
+            /*if( ((enemy.position.y + enemy.size.height) <= userShipObject.shipLeftPostiton.y  && (enemy.position.y + enemy.size.height) > userShipObject.shipTopPosition.y) && (enemy.position.x + enemy.size.width - userShipObject.shipLeftPostiton.x) == (userShipObject.shipLeftPostiton.y - enemy.position.y + enemy.size.height) && (enemy.position.y + enemy.size.height - userShipObject.shipTopPosition.y) == (userShipObject.shipTopPosition.x - enemy.position.x + enemy.size.width) )
            {
                
                hitShip = true;
                
-           }
+           }*/
+         
              
         } // End moveEnemy 
         
@@ -216,12 +218,28 @@
             hitEnemy = false;
             
         }
+        
+        function respawnBullet()
+        {
+            bulletDead = false;            
+        }
+        
+        function removeBullet()
+        {
+            
+            bulletDead = true;
+            bullet.position.x = -1;
+            bullet.position.y = -1;
+            
+        }
     
         // Firing the bullet
         // =================
 
         //Function repeats when it's called in animate which makes the bullet travel by itself after being shot
         function fireBullet(updatedX, updatedY, flag) {
+         
+            respawnBullet();
 
             //Only update variable on first frame
             if (flag == 1) {
@@ -230,13 +248,18 @@
                 bullet.position.y = updatedY;
             }
 
-            // Draw the bullet to the canvas
-            drawBullet();
-            
+            if(bulletDead == false)
+            {
+                
+                // Draw the bullet to the canvas
+                drawBullet();
+                
+            }
+           
             // Bullet Collsion
             // ===============
             
-            // If bullet hits top of canvas
+            // If bullet is on screen and has not reached top of canvas
             if (bullet.position.y >= 0){
                 
                 bullet.position.y -= bullet.velocity.y;
@@ -246,7 +269,7 @@
             {
                 //changes to false when there's a collsion with the top of the canvas
                 bulletOnScreen= false;
-
+                
                 //Clear the bullet from the canvas when it collides with top of canvas
                 ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
 
@@ -257,12 +280,16 @@
             {
                 // Stop drawing enemy
                 hitEnemy = true;
+                removeBullet();
+                
             }                                                                       // Right corner of bullet is between the two enemy corners
             else if(bullet.position.y <= (enemy.position.y + enemy.size.height) && (bullet.position.x + bullet.size.width) >= enemy.position.x && (bullet.position.x +                              bullet.size.width) <= (enemy.position.x + enemy.size.width))
             {
                 
                 // Stop drawing enemy
                 hitEnemy = true;
+                removeBullet();
+               
             }
           
             // Reset flag
@@ -309,7 +336,7 @@
                         userShipObject.shipLeftPostiton.x += userShipObject.acceleration.x;
                         userShipObject.shipRightPosition.x += userShipObject.acceleration.x;
                     }
-                    //If ships postion is greater than the (canvas width - acceleration distance) E.G 595 > 590. Only move the number of pixels required to reach 600 (canvas.width)
+                    //If ships postion is greater than the (canvas width - acceleration distance) E.G 595 > 590. Only move the number of pixels required to reach 600                                 (canvas.width)
                     else if (userShipObject.shipRightPosition.x > (canvas.width - userShipObject.acceleration.x)) {
                         //Move ship the pixels required to reach edge of canvas
                         userShipObject.shipTopPosition.x += (canvas.width - userShipObject.shipRightPosition.x);
@@ -337,9 +364,6 @@
                 }
 
             } //End of userShipObject
-        
-        
-       
 
         // Draw bullet and create bullet object
         // ====================================
