@@ -25,13 +25,12 @@
     <script type="text/javascript">
         
         // ************************** LEFT TO DO *****************************************
-        // 1. Make bullet disappear when it hits enemy
-        // 2. Have enemy respawn when when hit 
-        //      a. Make enemy appear in random area
-        //      b. Make enemy respawn 
+        
+        // 1. Add colision to angle side of ship
+        // 2. Make bullet disappear when it hits enemy 
         // 3. End game when user ship is killed or enemy reaches bottom of canvas
-        // 4. Add colision to angle side of ship
-        // 5. Make ship movement smoother
+        // 4. Make ship movement smoother
+        // 5. Add code that can handle the enemy moving faster
 
         // *******************************************************************************
         
@@ -48,6 +47,7 @@
         var hitEnemy = false;
         var safeSpaceX = 5; // The closest distance the enemy can appear on the x axis
         var safeSpaceY = 5; // The closest distance the enemy can appear on the y axis
+        var score = 0;
     
         //Resizes canvas when file opened
         function onLoad() {
@@ -192,6 +192,12 @@
                // Stop drawing the ship 
                hitShip = true;
                
+           }       //************* if bottom of enemy ***************                           ****** Right side of enemy **********   ***Collides with left side of ship***
+           else if((enemy.position.y + enemy.size.height) >= userShipObject.shipTopPosition.y && (enemy.position.x + enemy.size.width) > userShipObject.shipLeftPostiton.x &&                       enemy.position.x < userShipObject.shipTopPosition.x)// Judge if collision has occurred with side of ship
+           {
+               
+               hitShip = true;
+               
            }
              
         } // End moveEnemy 
@@ -200,16 +206,17 @@
         function respawnEnemy()
         {
             
+            // Give enemy random position to respawn
             randomEnemyPosition();
+            
+            // Redraw the enemy
             drawEnemy();
             
+            // Reset boolean tracking enemy status
             hitEnemy = false;
             
-            console.log(hitEnemy);
-            
         }
-        
-        
+    
         // Firing the bullet
         // =================
 
@@ -251,7 +258,7 @@
                 // Stop drawing enemy
                 hitEnemy = true;
             }                                                                       // Right corner of bullet is between the two enemy corners
-            else if(bullet.position.y <= (enemy.position.y + enemy.size.height) && (bullet.position.x + bullet.size.width) >= enemy.position.x && (bullet.position.x + bullet.size.width) <= (enemy.position.x + enemy.size.width))
+            else if(bullet.position.y <= (enemy.position.y + enemy.size.height) && (bullet.position.x + bullet.size.width) >= enemy.position.x && (bullet.position.x +                              bullet.size.width) <= (enemy.position.x + enemy.size.width))
             {
                 
                 // Stop drawing enemy
@@ -405,10 +412,12 @@
                 moveEnemy(); 
                 
             }
-            else if(hitEnemy == true)
+            else if(hitEnemy == true)// If enemy has been hit
             {
-                 respawnEnemy()
-
+                // Respawn enemy in random location
+                respawnEnemy();
+                score += 10;
+                console.log(score);
             }
            
             // If bullet has been fired and is onscreen
