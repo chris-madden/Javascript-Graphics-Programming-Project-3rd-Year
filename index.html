@@ -15,23 +15,27 @@
             border: 2px solid black;
         }
     </style>
+    
+    <script src="jquery-1.11.3.min.js"></script>
 
 </head>
 
 <body>
-
+    
+    <h1 id="endScreen">Game Over</h1>
+     
     <canvas id="canvasOne"></canvas>
 
     <script type="text/javascript">
         
+        
+        
         // ************************** LEFT TO DO *****************************************
         
         // 1. Get collision between bullet and enemy right
-        // 2. Add colision to angle side of ship
         // 3. End game when user ship is killed or enemy reaches bottom of canvas
-        // 4. Make ship movement smoother
-        // 5. Add code that can handle the enemy moving faster
-
+        // 4. Add code that can handle the enemy moving faster
+        // 5. Add colision to angle side of ship
         // *******************************************************************************
         
         // Gets a handle to the element with id canvasOne.
@@ -50,12 +54,28 @@
         var safeSpaceY = 5; // The closest distance the enemy can appear on the y axis
         var score = 0;
         var aDown = false, dDown = false, leftArrowDown = false, rightArrowDown = false; // Tracks which keys are being pressed or released
+        var gameOver = false; // Tracks if game is over
+        
+        // Hides the end screen
+        function hideEndScreen()
+        { 
+                document.getElementById("endScreen").style.visibility = "hidden";
+        }
+        
+       // Hide the canvas and shows end screen when game is over
+       function endGame() {
+           document.getElementById("canvasOne").style.visibility = "hidden";
+           document.getElementById("endScreen").style.visibility = "Visible";
+       }
     
         //Resizes canvas when file opened
         function onLoad() {
             canvas.width = 600;
             canvas.height = 800;
             drawUserShip();
+            
+            // Hide the end screen
+            hideEndScreen();
             
             // Draw enemy at a random postion on load
             randomEnemyPosition();
@@ -128,7 +148,7 @@
                 },
                 velocity: {
 
-                    y: 5
+                    y: 2
 
                 }
             
@@ -163,9 +183,7 @@
            // Enemy falls from top of canvas until it reaches the bottom
            if((enemy.position.y + enemy.size.height) < canvas.height)
            {
-               
-               enemy.position.y += 1;
-               
+               enemy.position.y += enemy.velocity.y;
            }
              
            //if the top of user ship hits the bottom of the enemy
@@ -175,6 +193,14 @@
                // Game over
                // Stop drawing the ship 
                hitShip = true;
+               gameOver = true;
+               
+               if(gameOver == true)
+               {
+                    endGame();
+                   
+               }
+              
                
            }// if left corner of ship hits the enemy
            else if(userShipObject.shipLeftPostiton.x >= enemy.position.x && userShipObject.shipLeftPostiton.x <= (enemy.position.x + enemy.size.width) &&
@@ -185,6 +211,12 @@
                // Stop drawing the ship 
                hitShip = true;
                
+               if(gameOver == true)
+               {
+                    endGame();
+                   
+               }
+               
            }// if right corner of ship hits enemy
            else if(userShipObject.shipRightPosition.x >= enemy.position.x && userShipObject.shipRightPosition.x <= (enemy.position.x + enemy.size.width) &&
                   userShipObject.shipRightPosition.y >= enemy.position.y && userShipObject.shipRightPosition.y <= (enemy.position.y + enemy.size.height))
@@ -193,6 +225,12 @@
                // Game over
                // Stop drawing the ship 
                hitShip = true;
+               
+              if(gameOver == true)
+               {
+                    endGame();
+                   
+               }
                
            }
            
@@ -266,7 +304,15 @@
                 
                 bullet.position.y -= bullet.velocity.y;
         
-            }                                                                       
+            }
+            else if(bullet.position.y < bullet.velocity.y)
+            {
+                
+                bullet.position.y -= (bullet.velocity.y - bullet.position.y); // ******************* Use this for fixing bullet with enemy collisions *************
+                bulletOnScreen= false;
+                //Clear the bullet from the canvas when it collides with top of canvas
+                //ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
+            }
             else 
             {
                 //changes to false when there's a collsion with the top of the canvas
@@ -280,10 +326,11 @@
             // If top of bullet is higher than bottom of bullet and left corner of bullet is between the two corners of the enemy
             if(bullet.position.y <= (enemy.position.y + enemy.size.height) && bullet.position.x >= enemy.position.x && bullet.position.x <= (enemy.position.x +                                 enemy.size.width))
             {
-                // Stop drawing enemy
-                hitEnemy = true;
-                removeBullet();
-                
+                 
+                    // Stop drawing enemy
+                    hitEnemy = true;
+                    removeBullet();
+  
             }                                                                       // Right corner of bullet is between the two enemy corners
             else if(bullet.position.y <= (enemy.position.y + enemy.size.height) && (bullet.position.x + bullet.size.width) >= enemy.position.x && (bullet.position.x +                              bullet.size.width) <= (enemy.position.x + enemy.size.width))
             {
@@ -293,7 +340,18 @@
                 removeBullet();
                
             }
-          
+            
+            // left corner of bullet is between the two corners of the enemy
+            if(bullet.position.y - (enemy.position.y + enemy.size.height) < bullet.velocity.y  && bullet.position.x >= enemy.position.x && bullet.position.x <=                                (enemy.position.x + enemy.size.width))
+            {
+                
+                bullet.position.y -= bullet.position.y - (enemy.position.y + enemy.size.height);
+            }                                                                                           // Left corner
+            else if(bullet.position.y - (enemy.position.y + enemy.size.height) < bullet.velocity.y && (bullet.position.x + bullet.size.width) >= enemy.position.x &&                                (bullet.position.x + bullet.size.width) <= (enemy.position.x + enemy.size.width))
+            {
+                bullet.position.y -= bullet.position.y - (enemy.position.y + enemy.size.height);
+            }
+        
             // Reset flag
             flag == 0;
 
@@ -413,9 +471,6 @@
 
             } //End bullet object
         
-        
-       
-        
         // Start running game from here
         // =============================
         
@@ -511,7 +566,6 @@
             
             if(event.keyCode == 65)// If A is released
             {
-
                 aDown = false;
             }
             else if(event.keyCode == 68)// If D is released
