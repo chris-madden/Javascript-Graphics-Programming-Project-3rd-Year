@@ -37,7 +37,7 @@ There are two controls schemes for moving your ship, you can use:
 
 ###Collisions
 
-Collisions occur between: 
+######Collisions occur between: 
 
 1. Bullets and squares
 2. Bullets and top of screen
@@ -56,7 +56,7 @@ Collisions occur between:
 i.e the angle part of the triangle (top of ship with left corner and top of ship with right corner).
 However, this still results in game over as square will now reach bottom of screen without being shot.*
 
-######Bugs
+####Bugs
 
 *Bug occurs when game is over and the spacebar is pressed. This will restart the game with the ship invisible but can still be moved and fired*
 
