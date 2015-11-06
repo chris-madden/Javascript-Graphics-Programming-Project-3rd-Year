@@ -40,8 +40,15 @@
 6. Right side of ship and right side of screen
 
 
-###Note:
+####Notes:
 
-####There are no collisions in for when the sqaure hits the side of your ship 
+*There are no collisions in for when the sqaure hits the side of your ship 
 i.e the angle part of the triangle (top of ship with left corner and top of ship with right corner).
-However, this still results in game over as square will now reach bottom of screen with being shot.
+However, this still results in game over as square will now reach bottom of screen with being shot.*
+
+*Mozilla website was used for the ranom method*
+```
+getRandomIntInclusive();
+```
+*Link is below*
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random)
