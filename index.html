@@ -12,7 +12,16 @@
         }
         
         canvas {
-            border: 2px solid black;
+            border: 2px solid red;
+        }
+        button{
+            
+            height: 50px;
+            width:100px;
+            
+            margin-top: 10px;
+            font-family: Impact;
+            
         }
     </style>
 
@@ -20,23 +29,20 @@
 
 <body>
      
-    <canvas id="canvasOne" ></canvas> <!--style="float: left"-->
+    <canvas id="canvasOne" ></canvas>
     
     <br/>
-    <!--Elements used to display game over screen-->
     
-    <button id="reloadButton" onclick="reloadPage()">Play Again</button>
+    <!--Buttons which appears when game is over -->
+    <button id="reloadButton" onclick="reloadPage()" style="margin-left: 200px;">Play Again</button>
+    <button id="closeButton" onclick="closeWindow()">Quit</button>
 
     <script type="text/javascript">
         
         // ************************** LEFT TO DO *****************************************
         
         // 1. Write up readme file
-        // 3. Clean up and have easier to read comments in the code
-        // 4. Add code that can handle the enemy moving faster
-        // 5. Add colision to angle side of ship
-        // 6. Add rules to screen before starting
-        // 7. 
+
         // *******************************************************************************
         
         // Gets a handle to the element with id canvasOne.
@@ -47,17 +53,17 @@
 
         // Global variables
         var bulletOnScreen = false; // Variable tracking if bullet is on screen or not
-        var positionFlag = 0; // Used as an access variable to update the bullets postion with the new ship position
+        var positionFlag = 0; // Used to trigger variables, to update only on the first frame on which it is called
         var hitShip = false; // Tracks if the ship has had a collision
         var hitEnemy = false; // Tracks if the enemy has had a collison
         var bulletDead = false; // Tracks if the bullet has had a collision
         var safeSpaceX = 5; // The closest distance the enemy can appear on the x axis
         var safeSpaceY = 5; // The closest distance the enemy can appear on the y axis
-        var score = 0;
+        var score = 0; // Tracks the score as enemies are killed
         var aDown = false, dDown = false, leftArrowDown = false, rightArrowDown = false; // Tracks which keys are being pressed or released
         var gameOver = false; // Tracks if game is over
         
-        
+        // =================
         // **** Objects ****
         // =================
         
@@ -173,6 +179,7 @@
 
         } //End bullet object
         
+        // ======================================
         // **** Start and end game functions ****
         // ======================================
         
@@ -196,6 +203,7 @@
         { 
             // Hide end screen elements
             document.getElementById("reloadButton").style.visibility = "hidden";
+            document.getElementById("closeButton").style.visibility = "hidden";
             
         }
         
@@ -206,24 +214,17 @@
            
            bulletDead = true;
            
-           ctx.font = "60px Verdana";
+           ctx.font = "60px Impact";
            ctx.fillStyle = "white";
-           ctx.fillText("Game Over", 130, 350);
+           ctx.fillText("Game Over", 180, 350);
            
-           ctx.font = "20px Verdana";
+           ctx.font = "20px Impact";
            ctx.fillStyle = "white";
            ctx.fillText("Score: " + score, 275, 400);
-           
-           // Hide the canvas
-           //document.getElementById("canvasOne").style.visibility = "hidden";
-           
-           // Display end screen elements
-           /*document.getElementById("endScreen").style.visibility = "Visible";
-           document.getElementById("score").style.visibility = "Visible";*/
+         
            document.getElementById("reloadButton").style.visibility = "Visible";
+           document.getElementById("closeButton").style.visibility = "Visible";
            
-           /*// Display Score
-           document.querySelector('.results').innerHTML = score;*/
        }
         
        // Reloads the page when 'Play Again button is pressed'
@@ -236,14 +237,21 @@
        function scoreTracker(score)
        {
            
-           ctx.font = "20px Verdana";
+           ctx.font = "20px Impact";
            ctx.fillStyle = "white";
            ctx.fillText("Score: " + score, 450, 30);
            
        }
+        
+       // Closes window when button is pressed
+       function closeWindow()
+       {
+           close();
+       }
     
-       // **** Draw methods ****
-       // ======================
+       // ==============================
+       // **** Draw objects methods ****
+       // ==============================
 
        //Draws the users ship to the canvas
        function drawUserShip() {
@@ -300,6 +308,7 @@
            
        }
         
+       // =========================
        // **** Enemy functions ****
        // =========================
         
@@ -350,7 +359,6 @@
           if((enemy.position.y + enemy.size.height) ==  userShipObject.shipTopPosition.y && userShipObject.shipTopPosition.x >= enemy.position.x &&                                            userShipObject.shipTopPosition.x <= (enemy.position.x + enemy.size.width))
           {    
               
-             
               // Stop drawing the ship 
               hitShip = true;
               
@@ -362,7 +370,6 @@
                    endGame(); // End game and display end screen
               }
              
-              
           }// If left corner of ship hits the enemy
           else if(userShipObject.shipLeftPostiton.x >= enemy.position.x && userShipObject.shipLeftPostiton.x <= (enemy.position.x + enemy.size.width) &&
                   userShipObject.shipLeftPostiton.y >= enemy.position.y && userShipObject.shipLeftPostiton.y <= (enemy.position.y + enemy.size.height))
@@ -414,7 +421,7 @@
            
        }
         
-        
+       // ==========================
        // **** Bullet Functions ****
        // ==========================
        
@@ -515,7 +522,7 @@
        }
         
        // **** Start running game from here ****
-       // =============================
+       // ======================================
        
        //Initialise size of canvas
        onLoad();
