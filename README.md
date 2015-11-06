@@ -9,20 +9,30 @@ This is a shooting game where squares are falling and trying to take out your sp
 ###Game Rules 
 
 You can move your ship left and right only. 
+
 Squares fall from top of screen and will respawn randomly each time one is killed.
+
 Only one square will be on the screen at any one time.
+
 Kill squares by shooting bullets from ship.
+
 If sqaures hit your ship or reach the ground it's game over
+
 You will get points for each square you shoot.
 
+You can only fire one bullet at a time, another can be fired when first bullet has left screen (so be accurate with your shooting).
+
 ###Controls (User Interaction)
+
+######Moving ship
 
 There are two controls schemes for moving your ship, you can use:
 
 1. 'A' and 'D' for moving ship left and right, respectively.
 2. Left and Right arrow keys for moving ship left and right, respectively.
 
-To shoot bullets from your ship
+######To shoot bullets from your ship
+
 1. Use spacebar
 
 ###Collisions
@@ -47,6 +57,8 @@ i.e the angle part of the triangle (top of ship with left corner and top of ship
 However, this still results in game over as square will now reach bottom of screen without being shot.*
 
 *Bug occurs when game is over and the spacerbar is pressed. This will restart the game with the ship invisible but can still be moved and fired*
+
+*Quit button wont work if opened externally E.G opened from live preview in Brackets*
 
 ####References
 
