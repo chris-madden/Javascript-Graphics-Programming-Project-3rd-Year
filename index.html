@@ -21,10 +21,13 @@
 </head>
 
 <body>
+     
+    <canvas id="canvasOne" style="float: left"></canvas>
     
     <h1 id="endScreen">Game Over</h1>
-     
-    <canvas id="canvasOne"></canvas>
+    <br/>
+    <h3 id="score">Score</h3>
+    <div class="results"></div>
 
     <script type="text/javascript">
         
@@ -60,12 +63,17 @@
         function hideEndScreen()
         { 
                 document.getElementById("endScreen").style.visibility = "hidden";
+                document.getElementById("score").style.visibility = "hidden";
         }
         
        // Hide the canvas and shows end screen when game is over
        function endGame() {
            document.getElementById("canvasOne").style.visibility = "hidden";
+           
            document.getElementById("endScreen").style.visibility = "Visible";
+           document.getElementById("score").style.visibility = "Visible";
+           
+           document.querySelector('.results').innerHTML = score;
        }
     
         //Resizes canvas when file opened
