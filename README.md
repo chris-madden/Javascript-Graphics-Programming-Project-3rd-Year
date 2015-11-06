@@ -16,7 +16,7 @@ Only one square will be on the screen at any one time.
 
 Kill squares by shooting bullets from ship.
 
-If sqaures hit your ship or reach the ground it's game over
+If squares hit your ship or reach the ground it's game over
 
 You will get points for each square you shoot.
 
@@ -45,18 +45,20 @@ Collisions occur between:
     1. The top of ship
     2. The left corner of ship
     3. The right corner of ship
-4. Squares and botton of screen
+4. Squares and bottom of screen
 5. Left side of ship and left side of screen
 6. Right side of ship and right side of screen
 
 
 ####Notes:
 
-*There are no collision detected when the sqaure hits the side of your ship 
+*There are no collision detected when the square hits the side of your ship 
 i.e the angle part of the triangle (top of ship with left corner and top of ship with right corner).
 However, this still results in game over as square will now reach bottom of screen without being shot.*
 
-*Bug occurs when game is over and the spacerbar is pressed. This will restart the game with the ship invisible but can still be moved and fired*
+######Bugs
+
+*Bug occurs when game is over and the spacebar is pressed. This will restart the game with the ship invisible but can still be moved and fired*
 
 *Quit button wont work if opened externally E.G opened from live preview in Brackets*
 
