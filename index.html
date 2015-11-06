@@ -27,7 +27,9 @@
     <h1 id="endScreen">Game Over</h1>
     <br/>
     <h3 id="score">Score</h3>
-    <div class="results"></div>
+    <h3 class="results"></h3>
+    <br/>
+    <button id="reloadButton" onclick="reloadPage()">Play Again</button>
 
     <script type="text/javascript">
         
@@ -62,18 +64,31 @@
         // Hides the end screen
         function hideEndScreen()
         { 
-                document.getElementById("endScreen").style.visibility = "hidden";
-                document.getElementById("score").style.visibility = "hidden";
+            // Hide end screen elements
+            document.getElementById("endScreen").style.visibility = "hidden";
+            document.getElementById("score").style.visibility = "hidden";
+            document.getElementById("reloadButton").style.visibility = "hidden";
+            
         }
         
        // Hide the canvas and shows end screen when game is over
        function endGame() {
+           
+           // Hide the canvas
            document.getElementById("canvasOne").style.visibility = "hidden";
            
+           // Display end screen elements
            document.getElementById("endScreen").style.visibility = "Visible";
            document.getElementById("score").style.visibility = "Visible";
+           document.getElementById("reloadButton").style.visibility = "Visible";
            
+           // Display Score
            document.querySelector('.results').innerHTML = score;
+       }
+        
+       function reloadPage()
+       {
+             location.reload();
        }
     
         //Resizes canvas when file opened
@@ -192,6 +207,16 @@
            if((enemy.position.y + enemy.size.height) < canvas.height)
            {
                enemy.position.y += enemy.velocity.y;
+           }
+           else if((enemy.position.y + enemy.size.height) >= canvas.height)
+           {
+               gameOver = true;
+               
+               if(gameOver == true)
+               {
+                    endGame();
+                   
+               }
            }
              
            //if the top of user ship hits the bottom of the enemy
