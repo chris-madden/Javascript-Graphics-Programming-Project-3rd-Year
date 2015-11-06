@@ -20,14 +20,11 @@
 
 <body>
      
-    <canvas id="canvasOne" style="float: left"></canvas>
+    <canvas id="canvasOne" ></canvas> <!--style="float: left"-->
     
+    <br/>
     <!--Elements used to display game over screen-->
-    <h1 id="endScreen">Game Over</h1>
-    <br/>
-    <h3 id="score">Score</h3>
-    <h3 class="results"></h3>
-    <br/>
+    
     <button id="reloadButton" onclick="reloadPage()">Play Again</button>
 
     <script type="text/javascript">
@@ -39,7 +36,7 @@
         // 4. Add code that can handle the enemy moving faster
         // 5. Add colision to angle side of ship
         // 6. Add rules to screen before starting
-        // 7. Style end screen
+        // 7. 
         // *******************************************************************************
         
         // Gets a handle to the element with id canvasOne.
@@ -51,125 +48,140 @@
         // Global variables
         var bulletOnScreen = false; // Variable tracking if bullet is on screen or not
         var positionFlag = 0; // Used as an access variable to update the bullets postion with the new ship position
-        var hitShip = false;
-        var hitEnemy = false;
-        var bulletDead = false;
+        var hitShip = false; // Tracks if the ship has had a collision
+        var hitEnemy = false; // Tracks if the enemy has had a collison
+        var bulletDead = false; // Tracks if the bullet has had a collision
         var safeSpaceX = 5; // The closest distance the enemy can appear on the x axis
         var safeSpaceY = 5; // The closest distance the enemy can appear on the y axis
         var score = 0;
         var aDown = false, dDown = false, leftArrowDown = false, rightArrowDown = false; // Tracks which keys are being pressed or released
         var gameOver = false; // Tracks if game is over
         
-         //Object for the user Ship
+        
+        // **** Objects ****
+        // =================
+        
+        //Object for the user Ship
         var userShipObject = {
 
-                shipTopPosition: {
+            shipTopPosition: {
 
-                    x: 300,
-                    y: 700
+                x: 300,
+                y: 700
 
-                },
-                shipLeftPostiton: {
+            },
+            shipLeftPostiton: {
 
-                    x: 275,
-                    y: 725
+                x: 275,
+                y: 725
 
-                },
-                shipRightPosition: {
+            },
+            shipRightPosition: {
 
-                    x: 325,
-                    y: 725
+                x: 325,
+                y: 725
 
-                },
-                acceleration: {
+            },
+            acceleration: {
 
-                    x: 7,
-                    y: 0
+                x: 7,
+                y: 0
 
-                },
-                moveRight: function () {
+            },
+            moveRight: function () {
 
-                    //If ships right corner isn't touching the edge of the canvas and is less than or equal to the canvas width - the acceleration value
-                    if (userShipObject.shipRightPosition.x < canvas.width && userShipObject.shipRightPosition.x <= (canvas.width - userShipObject.acceleration.x)) {
-                        //Move the ship to the right along the x axis to the speed set in the acceleration object
-                        userShipObject.shipTopPosition.x += userShipObject.acceleration.x;
-                        userShipObject.shipLeftPostiton.x += userShipObject.acceleration.x;
-                        userShipObject.shipRightPosition.x += userShipObject.acceleration.x;
-                    }
-                    //If ships postion is greater than the (canvas width - acceleration distance) E.G 595 > 590. Only move the number of pixels required to reach 600                                 (canvas.width)
-                    else if (userShipObject.shipRightPosition.x > (canvas.width - userShipObject.acceleration.x)) {
-                        //Move ship the pixels required to reach edge of canvas
-                        userShipObject.shipTopPosition.x += (canvas.width - userShipObject.shipRightPosition.x);
-                        userShipObject.shipLeftPostiton.x += (canvas.width - userShipObject.shipRightPosition.x);
-                        userShipObject.shipRightPosition.x += (canvas.width - userShipObject.shipRightPosition.x);
-                    }
-
-                },
-                moveLeft: function () {
-
-                    //If shipLeftPostiton.x is greater than 0 and greater than or equal to acceleration.x
-                    if (userShipObject.shipLeftPostiton.x > 0 && userShipObject.shipLeftPostiton.x >= userShipObject.acceleration.x) {
-                        //Move the ship to the left along the x axis to the speed set in the acceleration object
-                        userShipObject.shipTopPosition.x -= userShipObject.acceleration.x;
-                        userShipObject.shipLeftPostiton.x -= userShipObject.acceleration.x;
-                        userShipObject.shipRightPosition.x -= userShipObject.acceleration.x;
-                    } else if (userShipObject.shipLeftPostiton.x < userShipObject.acceleration.x) //shipLeftPostiton.x less than acceleration.x
-                    {
-                        //Move the ship to the left along the x axis to the amount of remaining pixels
-                        userShipObject.shipRightPosition.x -= userShipObject.shipLeftPostiton.x;
-                        userShipObject.shipTopPosition.x -= userShipObject.shipLeftPostiton.x;
-                        userShipObject.shipLeftPostiton.x -= userShipObject.shipLeftPostiton.x;
-                    }
-
+                //If ships right corner isn't touching the edge of the canvas and is less than or equal to the canvas width - the acceleration value
+                if (userShipObject.shipRightPosition.x < canvas.width && userShipObject.shipRightPosition.x <= (canvas.width - userShipObject.acceleration.x)) {
+                    //Move the ship to the right along the x axis to the speed set in the acceleration object
+                    userShipObject.shipTopPosition.x += userShipObject.acceleration.x;
+                    userShipObject.shipLeftPostiton.x += userShipObject.acceleration.x;
+                    userShipObject.shipRightPosition.x += userShipObject.acceleration.x;
+                }
+                //If ships postion is greater than the (canvas width - acceleration distance) E.G 595 > 590. Only move the number of pixels required to reach 600                                 (canvas.width)
+                else if (userShipObject.shipRightPosition.x > (canvas.width - userShipObject.acceleration.x)) {
+                    //Move ship the pixels required to reach edge of canvas
+                    userShipObject.shipTopPosition.x += (canvas.width - userShipObject.shipRightPosition.x);
+                    userShipObject.shipLeftPostiton.x += (canvas.width - userShipObject.shipRightPosition.x);
+                    userShipObject.shipRightPosition.x += (canvas.width - userShipObject.shipRightPosition.x);
                 }
 
-            } //End of userShipObject
+            },
+            moveLeft: function () {
 
+                //If shipLeftPostiton.x is greater than 0 and greater than or equal to acceleration.x
+                if (userShipObject.shipLeftPostiton.x > 0 && userShipObject.shipLeftPostiton.x >= userShipObject.acceleration.x) {
+                    //Move the ship to the left along the x axis to the speed set in the acceleration object
+                    userShipObject.shipTopPosition.x -= userShipObject.acceleration.x;
+                    userShipObject.shipLeftPostiton.x -= userShipObject.acceleration.x;
+                    userShipObject.shipRightPosition.x -= userShipObject.acceleration.x;
+                } else if (userShipObject.shipLeftPostiton.x < userShipObject.acceleration.x) //shipLeftPostiton.x less than acceleration.x
+                {
+                    //Move the ship to the left along the x axis to the amount of remaining pixels
+                    userShipObject.shipRightPosition.x -= userShipObject.shipLeftPostiton.x;
+                    userShipObject.shipTopPosition.x -= userShipObject.shipLeftPostiton.x;
+                    userShipObject.shipLeftPostiton.x -= userShipObject.shipLeftPostiton.x;
+                }
+
+            }
+
+        } //End of userShipObject
         
-        // Hides the end screen
-        function hideEndScreen()
-        { 
-            // Hide end screen elements
-            document.getElementById("endScreen").style.visibility = "hidden";
-            document.getElementById("score").style.visibility = "hidden";
-            document.getElementById("reloadButton").style.visibility = "hidden";
+        //Enemy object
+        var enemy = {
             
-        }
+            position: {
+
+                    x: 10,
+                    y: 10
+                   
+            },
+            size: {
+
+                width: 50,
+                height: 50
+
+            },
+            velocity: {
+
+                y: 5
+
+            }
+            
+        } // End enemy
         
-       // Hide the canvas and shows end screen when game is over
-       function endGame() {
-           
-           // Hide the canvas
-           document.getElementById("canvasOne").style.visibility = "hidden";
-           
-           // Display end screen elements
-           document.getElementById("endScreen").style.visibility = "Visible";
-           document.getElementById("score").style.visibility = "Visible";
-           document.getElementById("reloadButton").style.visibility = "Visible";
-           
-           // Display Score
-           document.querySelector('.results').innerHTML = score;
-       }
+        // Bullet Object
+        var bullet = {
+                
+            // Bullet shoots from top of ship
+            position: {
+
+                x: (userShipObject.shipTopPosition.x - 2),
+                y: (userShipObject.shipTopPosition.y - 2)
+
+            },
+            size: {
+
+                width: 4,
+                height: 4
+
+            },
+            velocity: {
+
+                y: 10
+
+            }
+
+        } //End bullet object
         
-       // Reloads the page when 'Play Again button is pressed'
-       function reloadPage()
-       {
-             location.reload();
-       }
+        // **** Start and end game functions ****
+        // ======================================
         
-       function scoreTracker(score)
-       {
-           
-           ctx.font = "20px Verdana";
-           ctx.fillStyle = "black";
-           ctx.fillText("Score: " + score, 500, 50);
-           
-       }
-    
-        //Resizes canvas when file opened
+        //Resizes canvas and performs actions to hide screen
         function onLoad() {
+            
             canvas.width = 600;
             canvas.height = 800;
+            canvas.style.background = "black";
             drawUserShip();
             
             // Hide the end screen
@@ -178,449 +190,443 @@
             // Draw enemy at a random postion on load
             randomEnemyPosition();
         }
-
-        //Draws the users ship to the canvas
-        function drawUserShip() {
-            /*//Clear the canvas each time method is called
-            ctx.clearRect(0, 0, canvas.width, canvas.height);*/
-            
-            ctx.fillStyle = "rgb(0, 255, 0)";
-
-            //Start path for drawing ship
-            ctx.beginPath();
-
-            //Position the top of ship will be at
-            ctx.moveTo(userShipObject.shipTopPosition.x, userShipObject.shipTopPosition.y);
-
-            //Draw line to left corner of ship
-            ctx.lineTo(userShipObject.shipLeftPostiton.x, userShipObject.shipLeftPostiton.y);
-
-            //Draw line to right corner of ship
-            ctx.lineTo(userShipObject.shipRightPosition.x, userShipObject.shipRightPosition.y);
-
-            //Colour in the ship
-            ctx.fill();
-
-            //Close the path
-            ctx.closePath();
-        }// End drawUserShip
         
-        // Draw enemy function, object enemy and moveEnemy function
-        // ========================================================
-        
-        //Draw an enemy
-        function drawEnemy() 
-        {
-            
-            // Enemies are red
-            ctx.fillStyle = "rgb(255, 0, 0)";
-
-            //Start path for drawing ship
-            ctx.beginPath();
-
-            // Draw the square for the bullet
-            ctx.rect(enemy.position.x, enemy.position.y, enemy.size.width, enemy.size.height);
-
-            // Fill the square with a solid colour
-            ctx.fill();
-
-            // Close path to finish drawing bullet
-            ctx.closePath();
-
-        }
-       
-        //Enemy object
-        var enemy = {
-            
-             position: {
-
-                    x: 10,
-                    y: 10
-                   
-                },
-                size: {
-
-                    width: 50,
-                    height: 50
-
-                },
-                velocity: {
-
-                    y: 2
-
-                }
+        // Hides the end screen at the begining of the game
+        function hideEndScreen()
+        { 
+            // Hide end screen elements
+            document.getElementById("reloadButton").style.visibility = "hidden";
             
         }
         
-        // === REFERENCE THIS IN THE README FILE (FROM OFFICIAL MOZILLA WEBSITE https://developer.mozilla.org/en-                                                               US/docs/Web/JavaScript/Reference/Global_Objects/Math/random)=========
-        function getRandomIntInclusive(min, max) {
-              return Math.floor(Math.random() * (max - min + 1)) + min;
-            }
-        
-        // Create new position for enemy for appear in
-        function randomEnemyPosition()
-        {
-            
-            var minX = 0 + safeSpaceX; // Won't go closer to the left of canvas than the size of the velocity 
-            var maxX = canvas.width - safeSpaceX - enemy.size.width; // Will max out at x position 545
-            
-            // Randomly generate x position
-            enemy.position.x = getRandomIntInclusive(minX, maxX);
-            
-            var minY = 0 + safeSpaceY;
-            var maxY = canvas.height / safeSpaceY;
-            
-            // Randomly generate y position
-            enemy.position.y =  getRandomIntInclusive(minY, maxY);
-            
-        }// End randomEnemyPosition
-        
-         //Function for moving enemy
-        function moveEnemy()
-        {
+       // Hide the canvas and shows end screen when game is over
+       function endGame() {
            
-           // Enemy falls from top of canvas until it reaches the bottom
-           if((enemy.position.y + enemy.size.height) < canvas.height)
-           {
-               enemy.position.y += enemy.velocity.y;
-           }
-           else if((enemy.position.y + enemy.size.height) >= canvas.height) // If enemy hits canvas bottom
-           {
-               gameOver = true;
-               
-               if(gameOver == true)
-               {
-                    endGame(); // End game and display end screen 
-               }
-           }
-             
-           //if the top of user ship hits the bottom of the enemy
-           if((enemy.position.y + enemy.size.height) ==  userShipObject.shipTopPosition.y && userShipObject.shipTopPosition.x >= enemy.position.x &&                                            userShipObject.shipTopPosition.x <= (enemy.position.x + enemy.size.width))
-           {    
-               
-               // Game over
-               // Stop drawing the ship 
-               hitShip = true;
-               gameOver = true;
-               
-               if(gameOver == true)
-               {
-                    endGame(); // End game and display end screen
-               }
-              
-               
-           }// if left corner of ship hits the enemy
-           else if(userShipObject.shipLeftPostiton.x >= enemy.position.x && userShipObject.shipLeftPostiton.x <= (enemy.position.x + enemy.size.width) &&
-                   userShipObject.shipLeftPostiton.y >= enemy.position.y && userShipObject.shipLeftPostiton.y <= (enemy.position.y + enemy.size.height))
-           {
-               
-               // Game over
-               // Stop drawing the ship 
-               hitShip = true;
-               
-               if(gameOver == true)
-               {
-                    endGame(); // End game and display end screen
-               }
-               
-           }// if right corner of ship hits enemy
-           else if(userShipObject.shipRightPosition.x >= enemy.position.x && userShipObject.shipRightPosition.x <= (enemy.position.x + enemy.size.width) &&
-                  userShipObject.shipRightPosition.y >= enemy.position.y && userShipObject.shipRightPosition.y <= (enemy.position.y + enemy.size.height))
-           {
-               
-               // Game over
-               // Stop drawing the ship 
-               hitShip = true;
-               
-              if(gameOver == true)
-               {
-                    endGame(); // End game and display end screen
-               }
-               
-           }
-             
-        } // End moveEnemy 
+           ctx.clearRect(0, 0, canvas.width, canvas.height);
+           
+           bulletDead = true;
+           
+           ctx.font = "60px Verdana";
+           ctx.fillStyle = "white";
+           ctx.fillText("Game Over", 130, 350);
+           
+           ctx.font = "20px Verdana";
+           ctx.fillStyle = "white";
+           ctx.fillText("Score: " + score, 275, 400);
+           
+           // Hide the canvas
+           //document.getElementById("canvasOne").style.visibility = "hidden";
+           
+           // Display end screen elements
+           /*document.getElementById("endScreen").style.visibility = "Visible";
+           document.getElementById("score").style.visibility = "Visible";*/
+           document.getElementById("reloadButton").style.visibility = "Visible";
+           
+           /*// Display Score
+           document.querySelector('.results').innerHTML = score;*/
+       }
         
-        // A function to redraw the enemy in a new random position after it's been hit
-        function respawnEnemy()
-        {
-            
-            // Give enemy random position to respawn
-            randomEnemyPosition();
-            
-            // Redraw the enemy
-            drawEnemy();
-            
-            // Reset boolean tracking enemy status
-            hitEnemy = false;
-            
-        }
+       // Reloads the page when 'Play Again button is pressed'
+       function reloadPage()
+       {
+             location.reload();
+       }
         
-        function respawnBullet()
-        {
-            bulletDead = false;            
-        }
-        
-        function removeBullet()
-        {
-            
-            bulletDead = true;
-            bullet.position.x = -1;
-            bullet.position.y = -1;
-            
-        }
+       // Prints the current score to the screen
+       function scoreTracker(score)
+       {
+           
+           ctx.font = "20px Verdana";
+           ctx.fillStyle = "white";
+           ctx.fillText("Score: " + score, 450, 30);
+           
+       }
     
-        // Firing the bullet
-        // =================
+       // **** Draw methods ****
+       // ======================
 
-        //Function repeats when it's called in animate which makes the bullet travel by itself after being shot
-        function fireBullet(updatedX, updatedY, flag) {
-         
-            respawnBullet();
-
-            //Only update variable on first frame
-            if (flag == 1) {
-                //Update the bullet position with the ships location
-                bullet.position.x = updatedX;
-                bullet.position.y = updatedY;
-            }
-
-            if(bulletDead == false)
-            {
-                
-                // Draw the bullet to the canvas
-                drawBullet();
-                
-            }
+       //Draws the users ship to the canvas
+       function drawUserShip() {
            
-            // Bullet Collsion
-            // ===============
-            
-            // If bullet is on screen and has not reached top of canvas
-            if (bullet.position.y >= 0){
-                
-                bullet.position.y -= bullet.velocity.y;
+           // Colour the ship white
+           ctx.fillStyle = "rgb(255, 255, 255)";
+           //Start path for drawing ship
+           ctx.beginPath();
+           //Position the top of ship will be at
+           ctx.moveTo(userShipObject.shipTopPosition.x, userShipObject.shipTopPosition.y);
+           //Draw line to left corner of ship
+           ctx.lineTo(userShipObject.shipLeftPostiton.x, userShipObject.shipLeftPostiton.y);
+           //Draw line to right corner of ship
+           ctx.lineTo(userShipObject.shipRightPosition.x, userShipObject.shipRightPosition.y);
+           //Colour in the ship
+           ctx.fill();
+           //Close the path
+           ctx.closePath();
+           
+       }// End drawUserShip
         
-            }
-            else if(bullet.position.y < bullet.velocity.y)
-            {
-                
-                bullet.position.y -= (bullet.velocity.y - bullet.position.y); // ******************* Use this for fixing bullet with enemy collisions *************
-                bulletOnScreen= false;
-                //Clear the bullet from the canvas when it collides with top of canvas
-                //ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
-            }
-            else 
-            {
-                //changes to false when there's a collsion with the top of the canvas
-                bulletOnScreen= false;
-                
-                //Clear the bullet from the canvas when it collides with top of canvas
-                ctx.clearRect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
-
-            }
-            
-            // If top of bullet is higher than bottom of bullet and left corner of bullet is between the two corners of the enemy
-            if(bullet.position.y <= (enemy.position.y + enemy.size.height) && bullet.position.x >= enemy.position.x && bullet.position.x <= (enemy.position.x +                                 enemy.size.width))
-            {
-                 
-                    // Stop drawing enemy
-                    hitEnemy = true;
-                    removeBullet();
-  
-            }                                                                       // Right corner of bullet is between the two enemy corners
-            else if(bullet.position.y <= (enemy.position.y + enemy.size.height) && (bullet.position.x + bullet.size.width) >= enemy.position.x && (bullet.position.x +                              bullet.size.width) <= (enemy.position.x + enemy.size.width))
-            {
-                
-                // Stop drawing enemy
-                hitEnemy = true;
-                removeBullet();
-               
-            }
-            
-            // left corner of bullet is between the two corners of the enemy
-            if(bullet.position.y - (enemy.position.y + enemy.size.height) < bullet.velocity.y  && bullet.position.x >= enemy.position.x && bullet.position.x <=                                (enemy.position.x + enemy.size.width))
-            {
-                
-                bullet.position.y -= bullet.position.y - (enemy.position.y + enemy.size.height);
-            }                                                                                           // Left corner
-            else if(bullet.position.y - (enemy.position.y + enemy.size.height) < bullet.velocity.y && (bullet.position.x + bullet.size.width) >= enemy.position.x &&                                (bullet.position.x + bullet.size.width) <= (enemy.position.x + enemy.size.width))
-            {
-                bullet.position.y -= bullet.position.y - (enemy.position.y + enemy.size.height);
-            }
         
-            // Reset flag
-            flag == 0;
-
-        }
+       //Draw an enemy
+       function drawEnemy() 
+       {
+           
+           // Enemies are red
+           ctx.fillStyle = "rgb(255, 0, 0)";
+           //Start path for drawing ship
+           ctx.beginPath();
+           // Draw the square for the bullet
+           ctx.rect(enemy.position.x, enemy.position.y, enemy.size.width, enemy.size.height);
+           // Fill the square with a solid colour
+           ctx.fill();
+           // Close path to finish drawing bullet
+           ctx.closePath();
+           
+       }
         
-        // Create object for user ship
-        // ===========================
-
+       //Draws the bullet
+       function drawBullet() {
+           
+           // Colour the bullet white
+           ctx.fillStyle = "rgb(255, 255, 255)";
+           
+           //Start path for drawing ship
+           ctx.beginPath();
+           // Draw the square for the bullet
+           ctx.rect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
+           // Fill the square with a solid colour
+           ctx.fill();
+           // Close path to finish drawing bullet
+           ctx.closePath();
+           
+       }
+        
+       // **** Enemy functions ****
+       // =========================
+        
+       // Get random values for enemy positions
+       function getRandomIntInclusive(min, max) 
+       {
+           return Math.floor(Math.random() * (max - min + 1)) + min;
+       }
        
-        // Draw bullet and create bullet object
-        // ====================================
-        
-        //Draws the bullet
-        function drawBullet() {
-
-            ctx.fillStyle = "rgb(0, 100, 0)";
-            
-            //Start path for drawing ship
-            ctx.beginPath();
-
-            // Draw the square for the bullet
-            ctx.rect(bullet.position.x, bullet.position.y, bullet.size.width, bullet.size.height);
-
-            // Fill the square with a solid colour
-            ctx.fill();
-
-            // Close path to finish drawing bullet
-            ctx.closePath();
-            
-        }
-
-        // Bullet Object
-        var bullet = {
-                
-                // Bullet shoots from top of ship
-                position: {
-
-                    x: (userShipObject.shipTopPosition.x - 2),
-                    y: (userShipObject.shipTopPosition.y - 2)
-
-                },
-                size: {
-
-                    width: 4,
-                    height: 4
-
-                },
-                velocity: {
-
-                    y: 10
-
-                }
-
-            } //End bullet object
-        
-        // Start running game from here
-        // =============================
-        
-        //Initialise size of canvas
-        onLoad();
-        
-        //Repeated function which takes care of the animation frames
-        function animate() 
-        {
-            //Clear the canvas each time method is called
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Pass in the score to be updated
-            scoreTracker(score);
-            
-            // Draw user ship if it hasn't been hit
-            if(hitShip == false)
-            {
-                drawUserShip();
-            }
-            
-            // Draw enemy if it hasn't been hit with bullet
-            if(hitEnemy == false)
-            {
-                drawEnemy();
-                moveEnemy(); 
-                
-            }
-            else if(hitEnemy == true)// If enemy has been hit
-            {
-                // Respawn enemy in random location
-                respawnEnemy();
-                score += 10;
-                console.log(score);
-            }
+       // Create new position for enemy for appear in
+       function randomEnemyPosition()
+       {
            
-            // If bullet has been fired and is onscreen
-            if (bulletOnScreen == true) {
-
-                //Run the fire method
-                fireBullet();
-                
-                // Prepares flag for updating ships position for when next bullet is fired
-                positionFlag = 1;
-            }
-            
-            // Move ship 
-            if(aDown === true || leftArrowDown === true)
-            {
-                userShipObject.moveLeft();
-            }
-            else if(dDown === true || rightArrowDown === true)
-            {   
-                 userShipObject.moveRight();
-            }
-            
-            requestAnimationFrame(animate);
-
-        }
-
-        //Adding an event listener so user can use keys to move ship
-        window.addEventListener("keydown", function (event) {
-            
-            if (event.keyCode == 39) //If right arrow key is pressed
-            {   
-                rightArrowDown = true;
-                
-            } else if (event.keyCode == 37) //If left arrow key is pressed
-            {
-                leftArrowDown = true;
-                
-            } else if (event.keyCode == 32 && bulletOnScreen == false) //If the spacebar is pressed and there is no bullet on the screen
-            {
-                
-                // When bullet fires change variable to true
-                bulletOnScreen = true;
-                
-                // Set to 1 so bullet position can be updated with the ships new position
-                positionFlag = 1;
-                fireBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), positionFlag);
-                       
-            }
-            else if(event.keyCode == 65)// If W is pressed
-            {
-                aDown = true;
-            }
-            else if(event.keyCode == 68)// If D is pressed
-            {
-                dDown = true;
-            }
-
-        }); //End event listener
+           var minX = 0 + safeSpaceX; // Won't go closer to the left of canvas than the size of the velocity 
+           var maxX = canvas.width - safeSpaceX - enemy.size.width; // Will max out at x position 545
+           
+           // Randomly generate x position
+           enemy.position.x = getRandomIntInclusive(minX, maxX);
+           
+           var minY = 0 + safeSpaceY;
+           var maxY = canvas.height / safeSpaceY;
+           
+           // Randomly generate y position
+           enemy.position.y =  getRandomIntInclusive(minY, maxY);
+           
+       }// End randomEnemyPosition
         
-         //Adding an event listener so user can use keys to move ship
-        window.addEventListener("keyup", function (event) {
+         // Move enemy
+       function moveEnemy()
+       {
+          
+          // Enemy falls from top of canvas until it reaches the bottom
+          if((enemy.position.y + enemy.size.height) < canvas.height)
+          {
+              enemy.position.y += enemy.velocity.y;
+          }
+          else if((enemy.position.y + enemy.size.height) >= canvas.height) // If enemy hits canvas bottom
+          {
+              gameOver = true;
+              
+              if(gameOver == true)
+              {
+                   endGame(); // End game and display end screen 
+              }
+          }
             
-            if(event.keyCode == 65)// If A is released
-            {
-                aDown = false;
-            }
-            else if(event.keyCode == 68)// If D is released
-            {
-                dDown = false;
-            }
-            else if(event.keyCode == 39)// If right arrow key is pressed
-            {  
-                rightArrowDown = false;
-            }
-            else if(event.keyCode == 37)// If left arrow key is pressed
-            {
-                leftArrowDown = false;
-            }
+          // If the top of ship hits the bottom of the enemy
+          if((enemy.position.y + enemy.size.height) ==  userShipObject.shipTopPosition.y && userShipObject.shipTopPosition.x >= enemy.position.x &&                                            userShipObject.shipTopPosition.x <= (enemy.position.x + enemy.size.width))
+          {    
+              
+             
+              // Stop drawing the ship 
+              hitShip = true;
+              
+              // Game over
+              gameOver = true;
+              
+              if(gameOver == true)
+              {
+                   endGame(); // End game and display end screen
+              }
+             
+              
+          }// If left corner of ship hits the enemy
+          else if(userShipObject.shipLeftPostiton.x >= enemy.position.x && userShipObject.shipLeftPostiton.x <= (enemy.position.x + enemy.size.width) &&
+                  userShipObject.shipLeftPostiton.y >= enemy.position.y && userShipObject.shipLeftPostiton.y <= (enemy.position.y + enemy.size.height))
+          {
+              
+              // Stop drawing the ship 
+              hitShip = true;
+              
+              // Game over
+              gameOver = true;
+              
+              if(gameOver == true)
+              {
+                   endGame(); // End game and display end screen
+              }
+              
+          }// If right corner of ship hits enemy
+          else if(userShipObject.shipRightPosition.x >= enemy.position.x && userShipObject.shipRightPosition.x <= (enemy.position.x + enemy.size.width) &&
+                 userShipObject.shipRightPosition.y >= enemy.position.y && userShipObject.shipRightPosition.y <= (enemy.position.y + enemy.size.height))
+          {
+              
+              // Stop drawing the ship 
+              hitShip = true;
+              
+              // Game over
+              gameOver = true;
+            
+              if(gameOver == true)
+              {
+                   endGame(); // End game and display end screen
+              }
+              
+          }
+            
+       } // End moveEnemy 
+        
+       // A function to redraw the enemy in a new random position after it's been hit
+       function respawnEnemy()
+       {
+           
+           // Give enemy random position to respawn
+           randomEnemyPosition();
+           
+           // Redraw the enemy
+           drawEnemy();
+           
+           // Reset boolean tracking enemy status
+           hitEnemy = false;
+           
+       }
+        
+        
+       // **** Bullet Functions ****
+       // ==========================
+       
+       // Activate bullet and have it come back of screen
+       function respawnBullet()
+       {
+           bulletDead = false;            
+       }
+       
+       // Take bullet off screen to avoid it hitting anything after it's been destroyed
+       function removeBullet()
+       {
+           
+           bulletDead = true;
+           bullet.position.x = -1;
+           bullet.position.y = -1;
+           
+       }
+   
+       // Fire the bullet
+       function fireBullet(updatedX, updatedY, flag) {
+        
+           respawnBullet();
+           
+           //Only update variable on first frame
+           if (flag == 1) {
+               
+               //Update the bullet position with the ships location
+               bullet.position.x = updatedX;
+               bullet.position.y = updatedY;
+           }
+           
+           if(bulletDead == false)
+           {
+               
+               // Draw the bullet to the canvas
+               drawBullet();
+               
+           }
+          
+           // Bullet Collsion
+           // ===============
+           
+           // If bullet is on screen and has not reached top of canvas
+           if (bullet.position.y >= 0){
+               
+               bullet.position.y -= bullet.velocity.y;
+       
+           }
+           else if(bullet.position.y < bullet.velocity.y)// If distance between bullet and top of screen is less than the velocity of bullet
+           {
+               
+               bullet.position.y -= -1; // Draw bullet at -1 so it appears to be heading off screen
+               bulletOnScreen= false;
+               
+           }
+           else 
+           {
+               //changes to false when there's a collsion with the top of the canvas
+               bulletOnScreen= false;
+           }
+           
+           // If top of bullet is higher than the bottom of bullet and left corner of bullet is between the two corners of the enemy
+           if(bullet.position.y <= (enemy.position.y + enemy.size.height) && bullet.position.x >= enemy.position.x && bullet.position.x <= (enemy.position.x +                                 enemy.size.width))
+           {
+                
+               // Stop drawing enemy
+               hitEnemy = true;
+               
+               // Remove bullet from screen
+               removeBullet();
 
-        }); //End event listener
+           } //If top of bullet is higher than the bottom of bullet and right corner of bullet is between the two enemy corners
+           else if(bullet.position.y <= (enemy.position.y + enemy.size.height) && (bullet.position.x + bullet.size.width) >= enemy.position.x && (bullet.position.x +                              bullet.size.width) <= (enemy.position.x + enemy.size.width))
+           {
+               
+               // Stop drawing enemy
+               hitEnemy = true;
+               
+               // Remove bullet from screen
+               removeBullet();
+              
+           }
+           
+           // If left corner of bullet is between the two corners of the enemy
+           if(bullet.position.y - (enemy.position.y + enemy.size.height) < bullet.velocity.y  && bullet.position.x >= enemy.position.x && bullet.position.x <=                                (enemy.position.x + enemy.size.width))
+           {
+               
+               bullet.position.y -= bullet.position.y - (enemy.position.y + enemy.size.height); // Bullet travels all the way towards the enemy
+           }                                                                                           
+           else if(bullet.position.y - (enemy.position.y + enemy.size.height) < bullet.velocity.y && (bullet.position.x + bullet.size.width) >= enemy.position.x &&                                (bullet.position.x + bullet.size.width) <= (enemy.position.x + enemy.size.width))
+           {
+               bullet.position.y -= bullet.position.y - (enemy.position.y + enemy.size.height); // Bullet travels all the way towards the enemy
+           }
+       
+           // Reset flag
+           flag == 0;
+       }
+        
+       // **** Start running game from here ****
+       // =============================
+       
+       //Initialise size of canvas
+       onLoad();
+       
+       //Repeated function which takes care of the animation frames
+       function animate() 
+       {
+           //Clear the canvas each time method is called
+           ctx.clearRect(0, 0, canvas.width, canvas.height);
+           
+           // Pass in the score to be updated
+           scoreTracker(score);
+           
+           // Draw user ship if it hasn't been hit
+           if(hitShip == false)
+           {
+               drawUserShip();
+           }
+           
+           // Draw enemy if it hasn't been hit with bullet
+           if(hitEnemy == false)
+           {
+               drawEnemy();
+               moveEnemy(); 
+               
+           }
+           else if(hitEnemy == true)// If enemy has been hit
+           {
+               // Respawn enemy in random location
+               respawnEnemy();
+               score += 10;
+               console.log(score);
+           }
+          
+           // If bullet has been fired and is onscreen
+           if (bulletOnScreen == true) {
+               //Run the fire method
+               fireBullet();
+               
+               // Prepares flag for updating ships position for when next bullet is fired
+               positionFlag = 1;
+           }
+           
+           // Move ship 
+           if(aDown === true || leftArrowDown === true)
+           {
+               userShipObject.moveLeft();
+           }
+           else if(dDown === true || rightArrowDown === true)
+           {   
+                userShipObject.moveRight();
+           }
+           
+           requestAnimationFrame(animate);
+       }
 
-        //Call the animate method 
-        animate();
+       //Adding an event listener so user can use keys to move ship
+       window.addEventListener("keydown", function (event) {
+           
+           if (event.keyCode == 39) //If right arrow key is pressed
+           {   
+               rightArrowDown = true;
+               
+           } else if (event.keyCode == 37) //If left arrow key is pressed
+           {
+               leftArrowDown = true;
+               
+           } else if (event.keyCode == 32 && bulletOnScreen == false) //If the spacebar is pressed and there is no bullet on the screen
+           {
+               
+               // When bullet fires change variable to true
+               bulletOnScreen = true;
+               
+               // Set to 1 so bullet position can be updated with the ships new position
+               positionFlag = 1;
+               fireBullet((userShipObject.shipTopPosition.x - 2), (userShipObject.shipTopPosition.y - 2), positionFlag);
+                      
+           }
+           else if(event.keyCode == 65)// If W is pressed
+           {
+               aDown = true;
+           }
+           else if(event.keyCode == 68)// If D is pressed
+           {
+               dDown = true;
+           }
+       }); //End event listener
+       
+       //Adding an event listener so user can use keys to move ship
+       window.addEventListener("keyup", function (event) {
+           
+           if(event.keyCode == 65)// If A is released
+           {
+               aDown = false;
+           }
+           else if(event.keyCode == 68)// If D is released
+           {
+               dDown = false;
+           }
+           else if(event.keyCode == 39)// If right arrow key is pressed
+           {  
+               rightArrowDown = false;
+           }
+           else if(event.keyCode == 37)// If left arrow key is pressed
+           {
+               leftArrowDown = false;
+           }
+       }); //End event listener
+
+       //Call the animate method 
+       animate();
     </script>
 
 </body>

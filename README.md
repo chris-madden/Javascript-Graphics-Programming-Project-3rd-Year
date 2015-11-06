@@ -1,10 +1,10 @@
 #Game Title
 
-##Square Invasion
+Square Invasion
 
 #Game Description
 
-##This is a shooting game where squares are falling and trying to take out your spaceship. You must shoot down the squares and stop them from landing below you.
+This is a shooting game where squares are falling and trying to take out your spaceship. You must shoot down the squares and stop them from landing below you.
 
 #Game Rules 
 
@@ -17,7 +17,7 @@
 
 #Controls (User Interaction)
 
-##There are two controls schemes for moving your ship, you can use:
+There are two controls schemes for moving your ship, you can use:
 
 1. 'A' and 'D' for moving ship left and right, respectively.
 2. Left and Right arrow keys for moving ship left and right, respectively.
@@ -27,7 +27,7 @@
 
 #Collisions
 
-##Collisions occer between: 
+Collisions occur between: 
 
 1. Bullets and squares
 2. Bullets and top of screen
@@ -42,11 +42,15 @@
 
 ####Notes:
 
-*There are no collisions in for when the sqaure hits the side of your ship 
+*There are no collision detected when the sqaure hits the side of your ship 
 i.e the angle part of the triangle (top of ship with left corner and top of ship with right corner).
-However, this still results in game over as square will now reach bottom of screen with being shot.*
+However, this still results in game over as square will now reach bottom of screen without being shot.*
 
-*Mozilla website was used for the ranom method*
+*Bug occurs when game is over and the spacerbar is pressed. This will restart the game with the ship invisible but can still be moved and fired*
+
+####References
+
+*Mozilla website was used for the random method*
 ```
 getRandomIntInclusive();
 ```
