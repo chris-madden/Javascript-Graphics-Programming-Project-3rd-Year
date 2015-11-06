@@ -50,7 +50,7 @@ There are two controls schemes for moving your ship, you can use:
 6. Right side of ship and right side of screen
 
 
-####Notes:
+####Notes
 
 *There are no collision detected when the square hits the side of your ship 
 i.e the angle part of the triangle (top of ship with left corner and top of ship with right corner).
