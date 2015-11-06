@@ -1,7 +1,47 @@
-Kill All Squares
+#Game Title
 
-Game description and objective
-This game involves shooting all the squares which falling towards your base. If they hit and take out your whole base then you lose. Use you ship to shoot the incoming sqaures and save the lives of many!
+##Square Invasion
 
-Controls 
-Use the arrow keys to move your ship left and right and use the spacebar to shoot bullets at the incoming squares.
+#Game Description
+
+##This is a shooting game where squares are falling and trying to take out your spaceship. You must shoot down the squares and stop them from landing below you.
+
+#Game Rules 
+
+## You can move your ship left and right only. 
+## Squares fall from top of screen and will respawn randomly each time one is killed.
+## Only one square will be on the screen at any one time.
+## Kill squares by shooting bullets from ship.
+## If sqaures hit your ship or reach the ground it's game over
+## You will get points for each square you shoot.
+
+#Controls (User Interaction)
+
+##There are two controls schemes for moving your ship, you can use:
+
+1. 'A' and 'D' for moving ship left and right, respectively.
+2. Left and Right arrow keys for moving ship left and right, respectively.
+
+##To shoot bullets from your ship
+1. Use spacebar
+
+#Collisions
+
+##Collisions occer between: 
+
+1. Bullets and squares
+2. Bullets and top of screen
+3. Squares and ship
+    1. The top of ship
+    2. The left corner of ship
+    3. The right corner of ship
+4. Squares and botton of screen
+5. Left side of ship and left side of screen
+6. Right side of ship and right side of screen
+
+
+###Note:
+
+####There are no collisions in for when the sqaure hits the side of your ship 
+i.e the angle part of the triangle (top of ship with left corner and top of ship with right corner).
+However, this still results in game over as square will now reach bottom of screen with being shot.
